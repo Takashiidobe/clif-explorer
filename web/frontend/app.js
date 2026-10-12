@@ -60,6 +60,7 @@ const toolbar = $('.toolbar');
 const statusLine = $('#status');
 const examplesSelect = $('#examples');
 const versionSelect = $('#version');
+const keymapSelect = $('#keymap');
 const archSelect = $('#arch');
 const flagsMenu = $('#flags-menu');
 const flagsSummary = $('#flags-summary');
@@ -78,7 +79,12 @@ function setStatus(text, kind = '') {
   statusLine.className = kind;
 }
 
+const KEYMAPS = ['default', 'emacs', 'vim'];
+const storedKeymap = storage.get('clif:keymap');
+const keymap = KEYMAPS.includes(storedKeymap) ? storedKeymap : 'default';
+
 const editor = CodeMirror.fromTextArea($('#clif'), {
+  keyMap: keymap,
   mode: 'clif',
   theme: 'material-darker',
   lineNumbers: true,
@@ -656,6 +662,12 @@ function wireEvents() {
   });
   runButton.addEventListener('click', run);
   $('#share').addEventListener('click', copyShareLink);
+  keymapSelect.value = keymap;
+  keymapSelect.addEventListener('change', () => {
+    editor.setOption('keyMap', keymapSelect.value);
+    storage.set('clif:keymap', keymapSelect.value);
+    editor.focus();
+  });
 }
 
 async function main() {

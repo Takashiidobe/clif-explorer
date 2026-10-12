@@ -33,6 +33,9 @@ The page has three tabs:
 - Calls between functions in the same program.
 - Traps, reported with the Cranelift trap code and the instruction that raised
   it.
+- Default, Emacs, and Vim keybindings in the editor.
+- Your last program, Cranelift version, target, flags, and keybindings are
+  restored when you revisit.
 - Share links that restore the program, Cranelift version, target, and flags.
 
 ## Not supported

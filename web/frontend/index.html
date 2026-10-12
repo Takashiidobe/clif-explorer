@@ -6,6 +6,7 @@
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="assets/codemirror.min.css">
 <link rel="stylesheet" href="assets/codemirror-material-darker.min.css">
+<link rel="stylesheet" href="assets/codemirror-dialog.min.css">
 <style>
 * { box-sizing: border-box; }
 body { margin: 0; background: #101b35; color: #eaf2ff; font: 15px/1.5 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
@@ -117,6 +118,11 @@ pre.vcode { margin: 0; font: 13px/1.6 ui-monospace, SFMono-Regular, Menlo, monos
         <div id="flags-list"></div>
       </div>
     </details>
+    <select id="keymap" aria-label="Keybindings">
+      <option value="default">Default keys</option>
+      <option value="emacs">Emacs keys</option>
+      <option value="vim">Vim keys</option>
+    </select>
     <button id="share" type="button">Share</button>
     <span class="spinner" aria-label="Working"></span>
     <span id="status" role="status"></span>
@@ -151,6 +157,7 @@ pre.vcode { margin: 0; font: 13px/1.6 ui-monospace, SFMono-Regular, Menlo, monos
 </footer>
 </main>
 <script src="assets/codemirror.min.js"></script>
+<script src="assets/codemirror-keymaps.min.js"></script>
 <script src="assets/codemirror-simple.min.js"></script>
 <script src="assets/codemirror-clif.js"></script>
 <script src="app.js"></script>
