@@ -1,0 +1,11 @@
+function %nonzero_double(i64) -> i64 {
+block0(v0: i64):
+    brif v0, block1, block2
+
+block1:
+    v1 = iadd v0, v0
+    return v1
+
+block2:
+    trap user1
+}

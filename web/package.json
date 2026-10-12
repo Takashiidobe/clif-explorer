@@ -1,0 +1,15 @@
+{
+  "name": "clif-explorer-web",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "playwright-core": "^1.64.0"
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test src/*.test.mjs",
+    "e2e": "node e2e/smoke.mjs",
+    "serve": "node serve.mjs"
+  }
+}

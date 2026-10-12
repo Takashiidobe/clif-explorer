@@ -1,0 +1,5 @@
+function %div(i64, i64) -> i64 {
+block0(v0: i64, v1: i64):
+    v2 = udiv v0, v1
+    return v2
+}

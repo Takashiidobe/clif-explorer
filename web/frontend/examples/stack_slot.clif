@@ -1,0 +1,8 @@
+function %spill(i64) -> i64 {
+    ss0 = explicit_slot 8
+block0(v0: i64):
+    v1 = stack_addr.i64 ss0
+    store v0, v1
+    v2 = load.i64 v1
+    return v2
+}

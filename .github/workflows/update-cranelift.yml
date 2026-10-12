@@ -1,0 +1,100 @@
+name: Update Cranelift
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Rebuild and deploy even when there is no new release
+        type: boolean
+        default: false
+
+concurrency: update-cranelift
+
+permissions:
+  contents: write
+  issues: write
+
+env:
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Find new Cranelift releases
+        id: releases
+        run: |
+          fresh=$(node scripts/new-cranelift-versions.mjs --write | tr '\n' ' ')
+          echo "fresh=${fresh% }" >> "$GITHUB_OUTPUT"
+          if [ -n "$fresh" ] || [ "${{ inputs.force }}" = "true" ]; then echo "build=true" >> "$GITHUB_OUTPUT"; fi
+
+      - if: steps.releases.outputs.build == 'true'
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - if: steps.releases.outputs.build == 'true'
+        uses: taiki-e/install-action@v2
+        with:
+          tool: wasm-pack
+
+      - if: steps.releases.outputs.build == 'true'
+        uses: actions/cache@v4
+        with:
+          path: web/target/clif-*
+          key: clif-wasm-${{ hashFiles('crates/clif-wasm/**', 'web/build.mjs') }}-${{ github.run_id }}
+          restore-keys: clif-wasm-${{ hashFiles('crates/clif-wasm/**', 'web/build.mjs') }}-
+
+      - name: Test new versions
+        if: steps.releases.outputs.fresh != ''
+        run: |
+          for version in ${{ steps.releases.outputs.fresh }}; do
+            scripts/check-cranelift-version.sh "$version"
+          done
+
+      - name: Download emulators
+        if: steps.releases.outputs.build == 'true'
+        run: |
+          gh release download emulators --pattern emulators.tar.gz
+          tar -xzf emulators.tar.gz
+
+      - name: Build
+        if: steps.releases.outputs.build == 'true'
+        working-directory: web
+        run: |
+          npm ci
+          npm run build
+
+      - name: Deploy
+        if: steps.releases.outputs.build == 'true'
+        working-directory: web
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        run: npx --yes netlify-cli@latest deploy --dir dist --prod
+
+      - name: Commit new versions
+        if: steps.releases.outputs.fresh != ''
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add web/versions.json web/locks
+          git commit -m "Add Cranelift ${{ steps.releases.outputs.fresh }}"
+          git push
+
+      - name: Report failure
+        if: failure() && steps.releases.outputs.fresh != ''
+        run: |
+          gh issue create \
+            --title "Cranelift ${{ steps.releases.outputs.fresh }} was not added" \
+            --body "The weekly update failed: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

@@ -1,0 +1,16 @@
+[package]
+name = "clif-wasm"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+cranelift-codegen = { version = "=0.136.0", default-features = false, features = ["std", "x86", "arm64", "riscv64", "s390x"] }
+cranelift-reader = "=0.136.0"
+target-lexicon = "0.13"
+wasm-bindgen = "0.2"
+serde = { version = "1", features = ["derive"] }
+serde-wasm-bindgen = "0.6"
+serde_bytes = "0.11"

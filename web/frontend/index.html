@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CLIF Explorer</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="assets/codemirror.min.css">
+<link rel="stylesheet" href="assets/codemirror-material-darker.min.css">
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; background: #101b35; color: #eaf2ff; font: 15px/1.5 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+main { max-width: 1400px; margin: auto; padding: 32px; }
+h1 { margin: 0; font-size: 28px; }
+h2 { font-size: 18px; color: #d9e8ff; margin: 0 0 8px; }
+h3 { font-size: 15px; color: #d9e8ff; margin: 18px 0 6px; }
+p { color: #9bb4d1; }
+a { color: #60a5fa; }
+code, .mono { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; }
+footer { margin-top: 32px; font-size: 13px; color: #9bb4d1; }
+.muted { color: #9bb4d1; font-weight: 400; }
+.toolbar { display: grid; gap: 10px; margin: 24px 0 12px; }
+.row { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+select, button, input, summary { font: inherit; border-radius: 6px; padding: 8px 12px; }
+select, input[type=text], input[type=number], summary { background: #192b52; color: #eaf2ff; border: 1px solid #365a91; }
+input[type=text], input[type=number] { font: 14px ui-monospace, SFMono-Regular, Menlo, monospace; padding: 8px 10px; }
+button { background: #3b82f6; color: #eff6ff; border: 0; font-weight: 700; cursor: pointer; }
+button.quiet { background: transparent; color: #9bb4d1; border: 1px solid #365a91; font-weight: 400; }
+button:disabled { opacity: .5; cursor: default; }
+select:disabled, summary.disabled { opacity: .5; }
+.spinner { display: none; width: 14px; height: 14px; border: 2px solid #9bb4d1; border-right-color: transparent; border-radius: 50%; animation: spin .7s linear infinite; }
+.toolbar.busy .spinner { display: inline-block; }
+@keyframes spin { to { transform: rotate(360deg); } }
+#status { min-height: 24px; color: #9bb4d1; }
+#status.ok { color: #4ade80; }
+#status.error { color: #f87171; }
+
+details.flags { position: relative; }
+details.flags summary { cursor: pointer; list-style: none; user-select: none; }
+details.flags summary::-webkit-details-marker { display: none; }
+details.flags summary .count { color: #60a5fa; font-weight: 700; }
+.flags-panel { position: absolute; z-index: 20; top: calc(100% + 6px); left: 0; width: min(520px, 90vw); max-height: 70vh; overflow: auto; padding: 12px; background: #14224a; border: 1px solid #365a91; border-radius: 8px; box-shadow: 0 8px 24px rgba(0, 0, 0, .45); }
+.flags-panel .head { display: flex; gap: 8px; margin-bottom: 8px; }
+.flags-panel .head input { flex: 1; }
+.flags-panel h4 { margin: 12px 0 4px; font-size: 13px; color: #9bb4d1; text-transform: uppercase; letter-spacing: .04em; }
+.flag { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 2px 10px; padding: 3px 0; }
+.flag.changed .name { color: #60a5fa; }
+.flag .name { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; }
+.flag label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.flag .hint { grid-column: 1 / -1; color: #7f98b8; font-size: 12px; line-height: 1.3; }
+.flag select, .flag input[type=number] { padding: 3px 6px; font-size: 13px; width: 130px; }
+.flag input[type=number] { width: 80px; }
+
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid #365a91; margin-bottom: 16px; }
+.tabs button { background: transparent; color: #9bb4d1; border-radius: 6px 6px 0 0; padding: 8px 18px; border-bottom: 2px solid transparent; font-weight: 600; }
+.tabs button[aria-selected=true] { color: #eaf2ff; border-bottom-color: #3b82f6; }
+.tabs button .badge { margin-left: 6px; color: #f87171; }
+
+.editor-shell { position: relative; width: 100%; height: 520px; min-height: 240px; resize: vertical; overflow: hidden; }
+.CodeMirror { height: 100%; border: 1px solid #374151; border-radius: 8px; font: 15px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; tab-size: 4; }
+.CodeMirror-scroll { overflow: auto; }
+.cm-s-material-darker span.cm-type { color: #c792ea; }
+.diagnostics-gutter { width: 14px; }
+.diagnostic-marker { color: #f87171; font-size: 12px; cursor: default; }
+.error-line { background: rgba(248, 113, 113, .14); }
+#diagnostics { position: absolute; left: 1px; right: 1px; bottom: 1px; z-index: 5; max-height: 60%; overflow: auto; margin: 0; padding: 10px 12px; background: #2a1215; color: #fecaca; border-top: 1px solid #7f1d1d; border-radius: 0 0 8px 8px; font: 13px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace; }
+#diagnostics pre { margin: 0; white-space: pre-wrap; }
+#diagnostics pre + pre { margin-top: 10px; padding-top: 10px; border-top: 1px solid #7f1d1d; }
+.stale .CodeMirror { opacity: .45; }
+
+table.listing { border-collapse: collapse; width: 100%; font: 13px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; }
+table.listing td { padding: 0 12px 0 0; white-space: pre; vertical-align: top; }
+table.listing td.off { color: #7f98b8; }
+table.listing td.bytes { color: #5f7a9e; }
+table.listing td.note { color: #fbbf24; }
+.listing .mn { color: #93c5fd; }
+.listing tr.raw td.insn { color: #7f98b8; }
+.listing tr.trap { background: rgba(251, 191, 36, .08); }
+.listing tr.selected { background: rgba(59, 130, 246, .22); }
+.fn-block { border: 1px solid #263b6a; border-radius: 8px; padding: 4px 14px 12px; margin-bottom: 16px; overflow-x: auto; }
+.fn-block h3 { margin-top: 10px; }
+.fn-block table.listing { width: auto; }
+.relocs { margin: 8px 0 0; padding-left: 18px; color: #9bb4d1; font-size: 13px; }
+.segmented { display: inline-flex; border: 1px solid #365a91; border-radius: 6px; overflow: hidden; margin-bottom: 12px; }
+.segmented label { padding: 5px 14px; cursor: pointer; color: #9bb4d1; }
+.segmented input { display: none; }
+.segmented label:has(input:checked) { background: #192b52; color: #eaf2ff; }
+pre.vcode { margin: 0; font: 13px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; color: #cfe1ff; white-space: pre-wrap; }
+
+.args { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.args label { display: flex; align-items: center; gap: 6px; color: #9bb4d1; font-size: 13px; }
+.args input { width: 140px; }
+.result { margin: 14px 0; padding: 10px 14px; border-radius: 8px; background: #14224a; border: 1px solid #263b6a; color: #eaf2ff; }
+.result.ok { border-color: #166534; }
+.result.trap { border-color: #92400e; }
+.result.fault { border-color: #7f1d1d; background: #2a1215; }
+.result .detail { color: #9bb4d1; font-size: 13px; margin-top: 4px; }
+[hidden] { display: none !important; }
+
+@media (max-width: 900px) {
+  main { padding: 18px; }
+  .row > select { flex: 1 1 auto; }
+  .editor-shell { height: 360px; }
+}
+</style>
+<main>
+<h1>CLIF Explorer</h1>
+<p>Compile <a href="https://cranelift.dev" target="_blank" rel="noreferrer">Cranelift</a> IR to machine code and run it.</p>
+<div class="toolbar">
+  <div class="row">
+    <select id="examples" aria-label="Example"><option value=""></option></select>
+    <select id="version" aria-label="Cranelift version"></select>
+    <select id="arch" aria-label="Target"></select>
+    <details class="flags" id="flags-menu">
+      <summary id="flags-summary" aria-label="Compiler flags">Flags</summary>
+      <div class="flags-panel">
+        <div class="head"><input id="flags-filter" type="text" placeholder="Filter flags" spellcheck="false" autocomplete="off" aria-label="Filter flags"><button id="flags-reset" class="quiet" type="button">Reset</button></div>
+        <div id="flags-list"></div>
+      </div>
+    </details>
+    <button id="share" type="button">Share</button>
+    <span class="spinner" aria-label="Working"></span>
+    <span id="status" role="status"></span>
+  </div>
+</div>
+<div class="tabs" role="tablist">
+  <button role="tab" id="tab-button-clif" data-tab="clif" aria-selected="true">CLIF</button>
+  <button role="tab" id="tab-button-asm" data-tab="asm" aria-selected="false">Assembly</button>
+  <button role="tab" id="tab-button-run" data-tab="run" aria-selected="false">Run</button>
+</div>
+<section id="tab-clif" role="tabpanel">
+  <div class="editor-shell" id="clif-shell"><textarea id="clif" spellcheck="false"></textarea><div id="diagnostics" aria-label="Compile errors" aria-live="polite" hidden></div></div>
+</section>
+<section id="tab-asm" role="tabpanel" hidden>
+  <div class="segmented" role="radiogroup" aria-label="Listing">
+    <label><input type="radio" name="asm-view" value="machine" checked>Machine code</label><label><input type="radio" name="asm-view" value="vcode">VCode</label>
+  </div>
+  <div id="asm"></div>
+</section>
+<section id="tab-run" role="tabpanel" hidden>
+  <div class="row">
+    <select id="run-function" aria-label="Function"></select>
+    <div class="args" id="run-args"></div>
+    <button id="run" type="button">Run</button>
+  </div>
+  <div id="run-result" class="result" hidden></div>
+</section>
+<footer>
+  Source: <a href="https://github.com/Takashiidobe/clif-explorer" target="_blank" rel="noreferrer">clif-explorer</a>,
+  <a href="https://gitlab.com/qemu-project/qemu/-/tree/615ece3c40" target="_blank" rel="noreferrer">QEMU</a>.
+  Licenses: <a href="vendor/QEMU-LICENSE">QEMU</a>, <a href="vendor/CAPSTONE-LICENSE">Capstone</a>.
+</footer>
+</main>
+<script src="assets/codemirror.min.js"></script>
+<script src="assets/codemirror-simple.min.js"></script>
+<script src="assets/codemirror-clif.js"></script>
+<script src="app.js"></script>

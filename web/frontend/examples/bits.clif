@@ -1,0 +1,5 @@
+function %leading_zeros(i64) -> i64 {
+block0(v0: i64):
+    v1 = clz v0
+    return v1
+}

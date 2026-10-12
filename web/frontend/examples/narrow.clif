@@ -1,0 +1,5 @@
+function %add8(i8, i8) -> i8 {
+block0(v0: i8, v1: i8):
+    v2 = iadd v0, v1
+    return v2
+}

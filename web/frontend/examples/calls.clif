@@ -1,0 +1,13 @@
+function %double(i64) -> i64 {
+block0(v0: i64):
+    v1 = iadd v0, v0
+    return v1
+}
+
+function %quad(i64) -> i64 {
+    fn0 = %double(i64) -> i64
+block0(v0: i64):
+    v1 = call fn0(v0)
+    v2 = call fn0(v1)
+    return v2
+}

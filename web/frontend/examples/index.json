@@ -1,0 +1,26 @@
+[
+  {
+    "group": "Basics",
+    "examples": [
+      { "name": "add", "file": "add.clif", "run": { "function": "%add", "args": ["40", "2"], "expect": ["42"] } },
+      { "name": "max", "file": "max.clif", "run": { "function": "%max", "args": ["-5", "3"], "expect": ["3"] } },
+      { "name": "i8 wraparound", "file": "narrow.clif", "run": { "function": "%add8", "args": ["200", "100"], "expect": ["44"] } },
+      { "name": "leading zeros", "file": "bits.clif", "run": { "function": "%leading_zeros", "args": ["0xff"], "expect": ["56"] } }
+    ]
+  },
+  {
+    "group": "Control flow and memory",
+    "examples": [
+      { "name": "fibonacci loop", "file": "fib.clif", "run": { "function": "%fib", "args": ["10"], "expect": ["55"] } },
+      { "name": "calls between functions", "file": "calls.clif", "run": { "function": "%quad", "args": ["5"], "expect": ["20"] } },
+      { "name": "stack slot", "file": "stack_slot.clif", "run": { "function": "%spill", "args": ["0x1234"], "expect": ["4660"] } }
+    ]
+  },
+  {
+    "group": "Traps",
+    "examples": [
+      { "name": "explicit trap", "file": "checked.clif", "run": { "function": "%nonzero_double", "args": ["0"], "expect": { "trap": "user1" } } },
+      { "name": "division by zero", "file": "div.clif", "run": { "function": "%div", "args": ["10", "0"], "expect": { "trap": "int_divz" } } }
+    ]
+  }
+]
