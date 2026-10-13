@@ -137,8 +137,13 @@ pre.vcode { margin: 0; font: 13px/1.6 ui-monospace, SFMono-Regular, Menlo, monos
   <div class="editor-shell" id="clif-shell"><textarea id="clif" spellcheck="false"></textarea><div id="diagnostics" aria-label="Compile errors" aria-live="polite" hidden></div></div>
 </section>
 <section id="tab-asm" role="tabpanel" hidden>
-  <div class="segmented" role="radiogroup" aria-label="Listing">
-    <label><input type="radio" name="asm-view" value="machine" checked>Machine code</label><label><input type="radio" name="asm-view" value="vcode">VCode</label>
+  <div class="row">
+    <div class="segmented" role="radiogroup" aria-label="Listing">
+      <label><input type="radio" name="asm-view" value="machine" checked>Machine code</label><label><input type="radio" name="asm-view" value="vcode">VCode</label>
+    </div>
+    <div id="asm-syntax" class="segmented" role="radiogroup" aria-label="Assembly syntax">
+      <label><input type="radio" name="asm-syntax" value="intel" checked>Intel</label><label><input type="radio" name="asm-syntax" value="att">AT&amp;T</label>
+    </div>
   </div>
   <div id="asm"></div>
 </section>

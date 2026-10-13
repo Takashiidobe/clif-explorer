@@ -47,8 +47,8 @@ const providers = {
   },
 };
 
-async function disassemble(arch, functions) {
-  const disassembler = createDisassembler(arch, await providers.capstone());
+async function disassemble(arch, functions, syntax = 'intel') {
+  const disassembler = createDisassembler(arch, await providers.capstone(), syntax);
   try {
     return functions.map((f) => ({ ...f, lines: disassembler.disassemble(f.code, f.traps) }));
   } finally {
@@ -67,6 +67,10 @@ async function compile(request) {
   const ms = performance.now() - started;
   compiled = output.errors.length ? null : { key: compileKey(request), arch, functions: output.functions, runner: null };
   const functions = output.errors.length ? [] : await disassemble(arch, output.functions);
+  if (arch === 'x86_64' && functions.length) {
+    const att = await disassemble(arch, output.functions, 'att');
+    functions.forEach((f, i) => { f.attLines = att[i].lines; });
+  }
   return { errors: output.errors, functions, ms };
 }
 

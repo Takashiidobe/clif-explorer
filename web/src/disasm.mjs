@@ -13,10 +13,10 @@ const ARCHES = {
 
 export const ARCH_NAMES = Object.keys(ARCHES);
 
-export function createDisassembler(archName, capstone) {
+export function createDisassembler(archName, capstone, syntax = 'intel') {
   const spec = ARCHES[archName];
   if (!spec) throw new Error(`unknown arch ${archName}`);
-  const handle = capstone._dis_open(spec.target);
+  const handle = capstone._dis_open(spec.target, syntax === 'att' ? 1 : 0);
   if (!handle) throw new Error(`cannot open disassembler for ${archName}`);
   const codePointer = capstone._malloc(WINDOW);
   const textPointer = capstone._malloc(TEXT_CAPACITY);

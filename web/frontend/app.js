@@ -99,6 +99,7 @@ const state = {
   arch: 'x86_64',
   flags: { ...BASELINE_FLAGS },
   tab: 'clif',
+  syntax: 'intel',
   run: { function: '', args: [] },
 };
 
@@ -339,14 +340,16 @@ function signature(f) {
 let lastCompile = null;
 
 function renderAsm() {
-  if (!lastCompile) return;
   const vcode = document.querySelector('input[name=asm-view]:checked').value === 'vcode';
+  $('#asm-syntax').hidden = state.arch !== 'x86_64' || vcode;
+  if (!lastCompile) return;
+  const att = state.syntax === 'att';
   const blocks = lastCompile.result.functions.map((f) =>
     h('div', { class: 'fn-block' },
       h('h3', {}, f.name, ' ', h('span', { class: 'muted' }, `${f.code.length} bytes · ${f.call_conv} · ${signature(f)}`)),
       vcode
         ? h('pre', { class: 'vcode' }, f.vcode ?? '')
-        : h('table', { class: 'listing' }, h('tbody', {}, annotateRelocs(f).map(listingRow))),
+        : h('table', { class: 'listing' }, h('tbody', {}, annotateRelocs(att && f.attLines ? { ...f, lines: f.attLines } : f).map(listingRow))),
       !vcode && f.relocs.length
         ? h('ul', { class: 'relocs' },
             f.relocs.map((r) => h('li', {}, `+0x${r.offset.toString(16)}: ${r.kind} ${r.target}${r.addend ? ` ${r.addend > 0 ? '+' : ''}${r.addend}` : ''}`)))
@@ -544,7 +547,9 @@ function stateParams(snapshot) {
 function saveState() {
   const snapshot = currentState();
   storage.set('clif:state', JSON.stringify(snapshot));
-  history.replaceState(null, '', `${location.pathname}#${stateParams(snapshot).toString().replaceAll('%2C', ',').replaceAll('%3D', '=')}`);
+  const query = new URLSearchParams(location.search);
+  query.set('syntax', state.syntax);
+  history.replaceState(null, '', `${location.pathname}?${query}#${stateParams(snapshot).toString().replaceAll('%2C', ',').replaceAll('%3D', '=')}`);
 }
 
 function linkedState() {
@@ -577,6 +582,7 @@ function applyState(snapshot) {
   if (ARCHS.some(([id]) => id === snapshot.arch)) state.arch = snapshot.arch;
   state.flags = { ...(snapshot.flags ?? BASELINE_FLAGS) };
   state.run = { function: snapshot.run?.function ?? '', args: snapshot.run?.args ?? [] };
+  if (['intel', 'att'].includes(snapshot.syntax)) state.syntax = snapshot.syntax;
   versionSelect.value = state.version;
   archSelect.value = state.arch;
   settingSource = true;
@@ -638,6 +644,7 @@ function wireEvents() {
   });
   archSelect.addEventListener('change', () => {
     state.arch = archSelect.value;
+    renderAsm();
     currentSchema = [];
     renderFlags();
     compileSoon(0);
@@ -661,6 +668,13 @@ function wireEvents() {
     });
   }
   for (const radio of document.querySelectorAll('input[name=asm-view]')) radio.addEventListener('change', renderAsm);
+  for (const radio of document.querySelectorAll('input[name=asm-syntax]')) {
+    radio.addEventListener('change', () => {
+      state.syntax = radio.value;
+      renderAsm();
+      saveState();
+    });
+  }
   runFunction.addEventListener('change', () => {
     state.run.function = runFunction.value;
     state.run.args = [];
@@ -681,6 +695,9 @@ async function main() {
   versionSelect.replaceChildren(...manifest.versions.map((v) => h('option', { value: v.id }, v.label)));
   archSelect.replaceChildren(...ARCHS.map(([id, label]) => h('option', { value: id }, label)));
   state.version = manifest.defaultVersion;
+  const querySyntax = new URLSearchParams(location.search).get('syntax');
+  const storedSyntax = storedState()?.syntax;
+  if (['intel', 'att'].includes(storedSyntax)) state.syntax = storedSyntax;
   wireEvents();
   try {
     await loadExamples();
@@ -705,6 +722,9 @@ async function main() {
     archSelect.value = state.arch;
     chooseExample();
   }
+  if (['intel', 'att'].includes(querySyntax)) state.syntax = querySyntax;
+  $(`input[name=asm-syntax][value=${state.syntax}]`).checked = true;
+  renderAsm();
 }
 
 main().catch((error) => setStatus(String(error), 'error'));
