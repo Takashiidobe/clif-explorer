@@ -13,20 +13,26 @@ _start:
   ld t5, 0(t6)
   ld a0, 8(t6)
   ld a1, 16(t6)
-  ld a2, 24(t6)
-  ld a3, 32(t6)
-  ld a4, 40(t6)
-  ld a5, 48(t6)
-  ld a6, 56(t6)
-  ld a7, 64(t6)
   la ra, done
   jr t5
 
 done:
   mv s1, a0
-  mv s2, a1
+  ld s2, 0(s1)
+  addi s1, s1, 64
+  li s0, UART
   li a0, 'R'
-  j report
+  sb a0, 0(s0)
+  mv a0, s2
+  call put64
+  beqz s2, 1f
+.Lresult_bytes:
+  lbu a0, 0(s1)
+  sb a0, 0(s0)
+  addi s1, s1, 1
+  addi s2, s2, -1
+  bnez s2, .Lresult_bytes
+  j 1f
 
 trap:
   csrr s1, mepc

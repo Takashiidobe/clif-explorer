@@ -7,7 +7,7 @@ use cranelift_codegen::isa::{self, CallConv, OwnedTargetIsa};
 use cranelift_codegen::settings::{self, Configurable, SetError, SettingKind};
 use cranelift_reader::{ParseOptions, parse_test};
 use serde::Serialize;
-use target_lexicon::Triple;
+use target_lexicon::{Architecture, Triple};
 
 #[derive(Serialize)]
 pub struct CompileOutput {
@@ -21,6 +21,7 @@ pub struct FunctionOutput {
     pub params: Vec<String>,
     pub returns: Vec<String>,
     pub call_conv: String,
+    pub signature: String,
     #[serde(with = "serde_bytes")]
     pub code: Vec<u8>,
     pub vcode: Option<String>,
@@ -88,8 +89,14 @@ fn apply_flag(
 
 fn build_isa(triple: &Triple, flags: &[String]) -> Result<OwnedTargetIsa, String> {
     let mut shared = settings::builder();
+    for flag in ["enable_llvm_abi_extensions", "enable_multi_ret_implicit_sret"] {
+        shared.enable(flag).map_err(|e| e.to_string())?;
+    }
     let mut isa_builder =
         isa::lookup(triple.clone()).map_err(|e| format!("unsupported target {triple}: {e}"))?;
+    if matches!(triple.architecture, Architecture::Riscv64(_)) {
+        isa_builder.enable("has_v").map_err(|e| e.to_string())?;
+    }
     for flag in flags.iter().filter(|f| !f.trim().is_empty()) {
         apply_flag(&mut shared, &mut isa_builder, flag)?;
     }
@@ -122,9 +129,26 @@ fn try_compile(
     let mut errors = Vec::new();
     for (func, _) in file.functions {
         let name = func.name.to_string();
+        if triple.architecture == Architecture::X86_64
+            && !isa.flags().enable_llvm_abi_extensions()
+            && func.signature.call_conv != CallConv::Tail
+            && func.signature.params.iter().chain(&func.signature.returns)
+                .any(|p| p.value_type == cranelift_codegen::ir::types::I128)
+        {
+            errors.push(format!("{name}: i128 signatures on x86-64 require enable_llvm_abi_extensions=true"));
+            continue;
+        }
+        if matches!(triple.architecture, Architecture::Riscv64(_))
+            && isa.isa_flags().iter().any(|flag| flag.name == "has_v" && flag.value_string() == "false")
+            && func.dfg.values().any(|value| func.dfg.value_type(value).is_vector())
+        {
+            errors.push(format!("{name}: vector operations on riscv64 require has_v=true"));
+            continue;
+        }
         let params = func.signature.params.iter().map(|p| p.value_type.to_string()).collect();
         let returns = func.signature.returns.iter().map(|p| p.value_type.to_string()).collect();
         let call_conv = func.signature.call_conv.to_string();
+        let signature = func.signature.to_string();
         let mut ctx = Context::for_function(func);
         ctx.set_disasm(true);
         match ctx.compile(&*isa, &mut ControlPlane::default()) {
@@ -133,6 +157,7 @@ fn try_compile(
                 params,
                 returns,
                 call_conv,
+                signature,
                 code: code.buffer.data().to_vec(),
                 vcode: code.vcode.clone(),
                 relocs: code

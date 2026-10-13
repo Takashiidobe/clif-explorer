@@ -1,5 +1,3 @@
-import { readFile } from 'node:fs/promises';
-
 const QEMU_DIR = new URL('../../build/qemu-wasm/out/', import.meta.url);
 const CAPSTONE_DIR = new URL('../../build/capstone-wasm/out/', import.meta.url);
 
@@ -13,9 +11,7 @@ export const nodeProviders = {
         arch,
         (async () => {
           const base = new URL(`qemu-system-${arch}`, QEMU_DIR);
-          const { default: create } = await import(`${base}.js`);
-          const compiled = await WebAssembly.compile(await readFile(new URL(`${base}.wasm`)));
-          return { factory: (options) => create({ ...options, locateFile: (f) => new URL(f, QEMU_DIR).href }), compiled };
+          return { js: `${base}.js`, wasm: `${base}.wasm`, worker: new URL('./qemu-worker.mjs', import.meta.url) };
         })(),
       );
     }

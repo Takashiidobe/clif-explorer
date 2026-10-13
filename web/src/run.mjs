@@ -1,15 +1,16 @@
 import { createDisassembler } from './disasm.mjs';
-import { GuestTimeout, RECORD_LENGTH, runGuest } from './qemu.mjs';
+import { GuestTimeout, runGuest } from './qemu.mjs';
 import { STUBS } from './stubs.mjs';
+import { adapterSource } from './adapter.mjs';
+import { decodeReturn, encodeArgument } from './args.mjs';
+import { MAX_RESULT_BYTES, RESULT_HEADER_LENGTH, RESULT_OFFSET, TRAP_RECORD_LENGTH, valueLayout } from './types.mjs';
 
 const PAGE = 0x1000;
 const FUNCTION_ALIGN = 16;
 const DEFAULT_TIMEOUT_MS = 5000;
 const GUEST_MEMORY_MB = 16;
 
-const INT_WIDTHS = { i8: 8, i16: 16, i32: 32, i64: 64 };
-
-const COMMON_QEMU_ARGS = ['-display', 'none', '-monitor', 'none', '-nodefaults', '-no-reboot', '-m', String(GUEST_MEMORY_MB)];
+const COMMON_QEMU_ARGS = ['-display', 'none', '-monitor', 'none', '-nodefaults', '-no-reboot', '-m', String(GUEST_MEMORY_MB), '-accel', 'tcg,tb-size=16'];
 const SERIAL_FILE = ['-serial', 'file:/serial.bin'];
 
 const X86_EXCEPTIONS = {
@@ -78,8 +79,6 @@ const hexValue = (n) => `0x${n.toString(16)}`;
 
 const ABIS = {
   x86_64: {
-    args: 6,
-    rets: 2,
     codeBase: 0x101000,
     littleEndian: true,
     describeTrap: (_pc, cause) => X86_EXCEPTIONS[Number(cause)] ?? `exception ${cause}`,
@@ -98,24 +97,18 @@ const ABIS = {
     },
   },
   aarch64: {
-    args: 8,
-    rets: 2,
     codeBase: 0x40081000,
     littleEndian: true,
     describeTrap: (_pc, cause) => AARCH64_CLASSES[Number(cause >> 26n)] ?? `exception class ${hexValue(cause >> 26n)}`,
     image: flatImage(0x100, ['-machine', 'virt', '-cpu', 'max', '-kernel', '/image.bin', ...SERIAL_FILE]),
   },
   riscv64: {
-    args: 8,
-    rets: 2,
     codeBase: 0x80001000,
     littleEndian: true,
     describeTrap: (_pc, cause) => RISCV_CAUSES[Number(cause)] ?? `trap cause ${cause}`,
     image: flatImage(0x100, ['-machine', 'virt', '-cpu', 'max', '-bios', 'none', '-kernel', '/image.bin', ...SERIAL_FILE]),
   },
   s390x: {
-    args: 5,
-    rets: 1,
     codeBase: 0x3000,
     littleEndian: false,
     describeTrap: (_pc, cause) => S390X_CODES[Number(cause & 0xffffn)] ?? `program interruption ${hexValue(cause & 0xffffn)}`,
@@ -150,7 +143,6 @@ function flatImage(argsOffset, args) {
 export class RunError extends Error {}
 
 const u64 = (v) => BigInt.asUintN(64, BigInt(v));
-const mask = (v, bits) => BigInt.asUintN(bits, BigInt(v));
 const roundUp = (n, to) => Math.ceil(n / to) * to;
 
 function expandStub(archName) {
@@ -175,7 +167,6 @@ function layOut(functions) {
 
 function applyRelocs(archName, functions, image, offsets, codeBase) {
   const view = new DataView(image.buffer);
-  const bigEndian = archName === 's390x';
   for (const f of functions) {
     for (const r of f.relocs) {
       const targetOffset = offsets.get(r.target);
@@ -210,7 +201,7 @@ function applyRelocs(archName, functions, image, offsets, codeBase) {
         }
         case 's390x:PLTRel32Dbl':
         case 's390x:PCRel32Dbl':
-          view.setInt32(at, offsetRelative / 2, bigEndian);
+          view.setInt32(at, offsetRelative / 2, false);
           break;
         default:
           throw new RunError(`${f.name}: unsupported ${r.kind} relocation against ${r.target} on ${archName}`);
@@ -219,30 +210,27 @@ function applyRelocs(archName, functions, image, offsets, codeBase) {
   }
 }
 
-function checkSignature(abi, f, args) {
-  const unsupported = [...f.params, ...f.returns].find((t) => !(t in INT_WIDTHS));
-  if (unsupported) throw new RunError(`${f.name}: ${unsupported} is not supported yet (integers up to i64 only)`);
-  if (f.params.length > abi.args) {
-    throw new RunError(`${f.name}: ${f.params.length} parameters, at most ${abi.args} supported (no stack arguments yet)`);
-  }
-  if (f.returns.length > abi.rets) {
-    throw new RunError(`${f.name}: ${f.returns.length} return values, at most ${abi.rets} supported`);
-  }
+function checkSignature(f, args) {
   if (args.length !== f.params.length) {
     throw new RunError(`${f.name} takes ${f.params.length} arguments, got ${args.length}`);
   }
+  const inputs = valueLayout(f.params);
+  const outputs = valueLayout(f.returns);
+  if (outputs.size > MAX_RESULT_BYTES) throw new RunError(`${f.name}: results exceed the ${MAX_RESULT_BYTES}-byte limit`);
+  return { inputs, outputs };
 }
 
 function argsBlock(abi, entry, values) {
-  const block = new Uint8Array(8 * (1 + abi.args));
+  const block = new Uint8Array(8 * (1 + values.length));
   const view = new DataView(block.buffer);
   [entry, ...values].forEach((value, i) => view.setBigUint64(8 * i, u64(value), abi.littleEndian));
   return block;
 }
 
-export async function createRunner(archName, functions, { qemu, capstone }) {
+export async function createRunner(archName, functions, { qemu, capstone, compileAdapter }) {
   const abi = ABIS[archName];
   if (!abi) throw new RunError(`unknown arch ${archName}`);
+  if (!compileAdapter) throw new RunError('Run requires an adapter compiler');
   const { image: code, offsets } = layOut(functions);
   applyRelocs(archName, functions, code, offsets, abi.codeBase);
   const stub = expandStub(archName);
@@ -257,6 +245,23 @@ export async function createRunner(archName, functions, { qemu, capstone }) {
   disassembler.close();
 
   const byName = new Map(functions.map((f) => [f.name, f]));
+  const adapters = new Map();
+  let adapterName = '%__clif_explorer_run';
+  while (byName.has(adapterName)) adapterName += '_';
+
+  async function prepare(f) {
+    if (!adapters.has(f.name)) {
+      const output = await compileAdapter(adapterSource(f, adapterName));
+      if (output.errors.length) throw new RunError(`${f.name}: cannot prepare the call: ${output.errors.join('\n')}`);
+      const adapter = output.functions[0];
+      if (!adapter) throw new RunError(`${f.name}: the adapter compiler produced no function`);
+      const all = [...functions, adapter];
+      const layout = layOut(all);
+      applyRelocs(archName, all, layout.image, layout.offsets, abi.codeBase);
+      adapters.set(f.name, { code: layout.image, entry: abi.codeBase + layout.offsets.get(adapter.name) });
+    }
+    return adapters.get(f.name);
+  }
 
   function locate(pcs) {
     let fallback = {};
@@ -279,11 +284,16 @@ export async function createRunner(archName, functions, { qemu, capstone }) {
   async function run(fnName, args = [], { timeoutMs = DEFAULT_TIMEOUT_MS } = {}) {
     const f = byName.get(fnName);
     if (!f) throw new RunError(`no function named ${fnName}`);
-    checkSignature(abi, f, args);
-
-    const values = f.params.map((t, i) => mask(args[i], INT_WIDTHS[t]));
-    const entry = abi.codeBase + offsets.get(fnName);
-    const guest = abi.image(stub, argsBlock(abi, entry, values), code);
+    const { inputs, outputs } = checkSignature(f, args);
+    const prepared = await prepare(f);
+    const outputOffset = roundUp(inputs.size, RESULT_OFFSET);
+    const runCode = new Uint8Array(prepared.code.length + outputOffset + RESULT_OFFSET + outputs.size);
+    runCode.set(prepared.code);
+    const data = new DataView(runCode.buffer, prepared.code.length);
+    inputs.entries.forEach(({ type, offset }, i) => encodeArgument(data, offset, type, args[i], abi.littleEndian));
+    data.setBigUint64(outputOffset, BigInt(outputs.size), abi.littleEndian);
+    const callArgs = [abi.codeBase + prepared.code.length, abi.codeBase + prepared.code.length + outputOffset];
+    const guest = abi.image(stub, argsBlock(abi, prepared.entry, callArgs), runCode);
 
     let record;
     try {
@@ -292,26 +302,24 @@ export async function createRunner(archName, functions, { qemu, capstone }) {
         files: guest.files,
         args: [...guest.args, ...COMMON_QEMU_ARGS],
         timeoutMs,
+        resultBytes: outputs.size,
       });
     } catch (error) {
       if (error instanceof GuestTimeout) return { status: 'timeout', returns: [] };
       throw error;
     }
-    if (record.length !== RECORD_LENGTH) throw new RunError('the emulator produced a truncated result');
-
     const view = new DataView(record.buffer, record.byteOffset);
-    const first = view.getBigUint64(1, true);
-    const second = view.getBigUint64(9, true);
-
     if (record[0] === 'R'.charCodeAt(0)) {
-      const returns = f.returns.map((t, i) => {
-        const bits = INT_WIDTHS[t];
-        const unsigned = mask([first, second][i], bits);
-        return { type: t, unsigned, signed: BigInt.asIntN(bits, unsigned) };
-      });
+      if (record.length !== RESULT_HEADER_LENGTH + outputs.size || view.getBigUint64(1, true) !== BigInt(outputs.size)) {
+        throw new RunError('the emulator produced an invalid result');
+      }
+      const returns = outputs.entries.map(({ type, offset }) => decodeReturn(view, RESULT_HEADER_LENGTH + offset, type, abi.littleEndian));
       return { status: 'ok', returns };
     }
 
+    if (record.length !== TRAP_RECORD_LENGTH || record[0] !== 'T'.charCodeAt(0)) throw new RunError('the emulator produced an invalid trap record');
+    const first = view.getBigUint64(1, true);
+    const second = view.getBigUint64(9, true);
     const found = locate((abi.trapCandidates ?? ((pc) => [pc]))(first, second));
     return {
       status: found.trap ? 'trap' : 'fault',

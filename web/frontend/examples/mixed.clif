@@ -1,0 +1,6 @@
+function %mixed(i64, f64) -> f64 {
+block0(v0: i64, v1: f64):
+    v2 = fcvt_from_sint.f64 v0
+    v3 = fadd v2, v1
+    return v3
+}

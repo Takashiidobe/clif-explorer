@@ -1,0 +1,4 @@
+function %half(f16) -> f16 {
+block0(v0: f16):
+    return v0
+}

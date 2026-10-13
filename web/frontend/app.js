@@ -1,4 +1,4 @@
-import { parseInteger } from '../src/args.mjs';
+import { defaultArgument, formatFloat, parseArgument, parseSharedArguments } from '../src/args.mjs';
 
 const ARCHS = [
   ['x86_64', 'x86-64'],
@@ -376,7 +376,8 @@ function renderRunArgs() {
           type: 'text',
           spellcheck: 'false',
           autocomplete: 'off',
-          value: state.run.args[i] ?? '0',
+          value: state.run.args[i] ?? defaultArgument(type),
+          style: type.includes('x') || type === 'i128' ? 'width: 280px' : '',
           'data-index': i,
           oninput: (e) => {
             state.run.args[i] = e.target.value;
@@ -435,6 +436,11 @@ async function compile() {
 }
 
 function formatReturn(r) {
+  if (r.lanes) {
+    const lanes = r.lanes.map((lane) => lane.type.startsWith('f') ? formatFloat(lane.value) : String(lane.signed));
+    return `[${lanes.join(', ')}] (${hex(r.bits)})`;
+  }
+  if (r.type.startsWith('f')) return `${formatFloat(r.value)} (${hex(r.bits)})`;
   const unsigned = hex(r.unsigned);
   return r.signed === r.unsigned ? `${r.signed} (${unsigned})` : `${r.signed} (${unsigned}, unsigned ${r.unsigned})`;
 }
@@ -466,7 +472,7 @@ async function run() {
   if (!f) return;
   let args;
   try {
-    args = f.params.map((_, i) => parseInteger(state.run.args[i] ?? '0'));
+    args = f.params.map((type, i) => parseArgument(type, state.run.args[i] ?? defaultArgument(type)));
   } catch (error) {
     setStatus(error.message, 'error');
     return;
@@ -531,7 +537,7 @@ function stateParams(snapshot) {
   });
   if (Object.keys(snapshot.flags).length) params.set('flags', formatFlags(snapshot.flags));
   if (snapshot.run.function) params.set('fn', snapshot.run.function);
-  if (snapshot.run.args.length) params.set('args', snapshot.run.args.join(','));
+  if (snapshot.run.args.length) params.set('args', JSON.stringify(snapshot.run.args));
   return params;
 }
 
@@ -552,7 +558,7 @@ function linkedState() {
     flags: parseFlags(params.get('flags') ?? ''),
     run: {
       function: params.get('fn') ?? '',
-      args: params.has('args') ? params.get('args').split(',') : [],
+      args: params.has('args') ? parseSharedArguments(params.get('args')) : [],
     },
   };
 }

@@ -1,62 +1,55 @@
-export const RECORD_LENGTH = 17;
-const POLL_MS = 2;
-
+import { MAX_RESULT_BYTES, RESULT_HEADER_LENGTH, TRAP_RECORD_LENGTH } from './types.mjs';
 export class GuestTimeout extends Error {}
 
-let spawned = null;
-let wrapped = false;
-
-function trackWorkers() {
-  if (wrapped) return;
-  wrapped = true;
-  const nodeThreads = typeof process === 'undefined' ? null : process.getBuiltinModule?.('worker_threads');
-  const Native = nodeThreads?.Worker ?? globalThis.Worker;
-  const Tracked = class extends Native {
-    constructor(...args) {
-      super(...args);
-      spawned?.push(this);
-    }
-  };
-  if (nodeThreads) nodeThreads.Worker = Tracked;
-  else globalThis.Worker = Tracked;
+export function recordLength(serial, resultBytes) {
+  if (!serial.length) return null;
+  if (serial[0] === 'T'.charCodeAt(0)) return TRAP_RECORD_LENGTH;
+  if (serial[0] !== 'R'.charCodeAt(0)) throw new Error('the emulator produced an invalid record');
+  if (serial.length < RESULT_HEADER_LENGTH) return null;
+  const size = new DataView(serial.buffer, serial.byteOffset).getBigUint64(1, true);
+  if (size > BigInt(MAX_RESULT_BYTES) || size !== BigInt(resultBytes)) throw new Error('the emulator produced an invalid result length');
+  return RESULT_HEADER_LENGTH + Number(size);
 }
 
-export async function runGuest({ load, files, args, timeoutMs }) {
-  const { factory, compiled } = await load();
-  let emscripten;
-  trackWorkers();
-  const workers = (spawned = []);
-  const started = Date.now();
-  factory({
-    arguments: args,
-    print() {},
-    printErr() {},
-    instantiateWasm(imports, receive) {
-      WebAssembly.instantiate(compiled, imports).then((instance) => receive(instance, compiled));
-      return {};
-    },
-    preRun: [
-      (m) => {
-        emscripten = m;
-        for (const [path, bytes] of Object.entries(files)) m.FS.writeFile(path, bytes);
-      },
-    ],
-  });
-
+export async function runGuest({ load, files, args, timeoutMs, resultBytes }) {
+  const { compiled, js, wasm, worker: workerURL } = await load();
+  const nodeProcesses = typeof process === 'undefined' ? null : process.getBuiltinModule?.('child_process');
+  const worker = nodeProcesses
+    ? nodeProcesses.fork(workerURL, { serialization: 'advanced', stdio: ['ignore', 'ignore', 'pipe', 'ipc'] })
+    : new Worker(workerURL);
+  let timer;
   try {
-    for (;;) {
-      let serial = new Uint8Array();
-      try {
-        serial = emscripten.FS.readFile('/serial.bin');
-      } catch {
-        // the chardev creates the file once QEMU has started
+    return await new Promise((resolve, reject) => {
+      const message = (data) => {
+        if (data.ok) resolve(data.record);
+        else reject(new Error(data.error));
+      };
+      if (nodeProcesses) {
+        worker.stderr.resume();
+        worker.on('message', message);
+        worker.on('error', reject);
+        worker.on('exit', (code) => reject(new Error(`the emulator worker exited before reporting a result (${code})`)));
+      } else {
+        worker.onmessage = ({ data }) => message(data);
+        worker.onerror = (event) => {
+          event.preventDefault();
+          reject(new Error(event.message));
+        };
       }
-      if (serial.length >= RECORD_LENGTH) return serial.slice(0, RECORD_LENGTH);
-      if (Date.now() - started > timeoutMs) throw new GuestTimeout();
-      await new Promise((resolve) => setTimeout(resolve, POLL_MS));
-    }
+      timer = setTimeout(() => reject(new GuestTimeout()), timeoutMs);
+      const request = { compiled, js, wasm, files, args, resultBytes };
+      if (nodeProcesses) worker.send(request);
+      else worker.postMessage(request);
+    });
   } finally {
-    spawned = null;
-    for (const worker of workers) worker.terminate();
+    clearTimeout(timer);
+    if (nodeProcesses) {
+      if (worker.exitCode === null && worker.signalCode === null) {
+        await new Promise((resolve) => {
+          worker.once('close', resolve);
+          worker.kill('SIGKILL');
+        });
+      }
+    } else worker.terminate();
   }
 }

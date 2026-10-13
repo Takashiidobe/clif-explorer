@@ -12,7 +12,6 @@ let assets;
 let cranelift;
 let compiled = null;
 
-const factories = new Map();
 const qemuModules = new Map();
 let capstoneModule;
 
@@ -28,8 +27,10 @@ const providers = {
       const wasm = new URL(assets.qemu[arch].wasm, self.location).href;
       qemuModules.set(
         arch,
-        Promise.all([import(js), WebAssembly.compileStreaming(fetch(wasm))]).then(([{ default: create }, compiled]) => ({
-          factory: (options) => create({ ...options, mainScriptUrlOrBlob: js, locateFile: (f) => (f.endsWith('.wasm') ? wasm : new URL(f, js).href) }),
+        WebAssembly.compileStreaming(fetch(wasm)).then((compiled) => ({
+          js,
+          wasm,
+          worker: new URL(assets.qemuWorker, self.location).href,
           compiled,
         })),
       );
@@ -91,7 +92,10 @@ const handlers = {
       const { errors } = await compile(request);
       if (errors.length) throw new Error('The program does not compile.');
     }
-    compiled.runner ??= await createRunner(compiled.arch, compiled.functions, providers);
+    compiled.runner ??= await createRunner(compiled.arch, compiled.functions, {
+      ...providers,
+      compileAdapter: (source) => cranelift.compile(source, TRIPLES[request.arch], request.flags),
+    });
     const started = performance.now();
     const result = await compiled.runner.run(name, args);
     return { ...result, ms: performance.now() - started };

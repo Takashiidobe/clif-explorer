@@ -1,0 +1,5 @@
+function %add_float32(f32, f32) -> f32 {
+block0(v0: f32, v1: f32):
+    v2 = fadd v0, v1
+    return v2
+}

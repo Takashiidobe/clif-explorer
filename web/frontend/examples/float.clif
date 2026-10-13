@@ -1,0 +1,5 @@
+function %add_float(f64, f64) -> f64 {
+block0(v0: f64, v1: f64):
+    v2 = fadd v0, v1
+    return v2
+}

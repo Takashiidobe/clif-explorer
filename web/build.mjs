@@ -92,6 +92,7 @@ mkdirSync(out, { recursive: true });
 cpSync(join(root, 'frontend'), out, { recursive: true });
 
 const worker = await bundle('src/worker.js', 'worker');
+const qemuWorker = await bundle('src/qemu-worker.mjs', 'qemu-worker');
 const app = await bundle('frontend/app.js', 'app');
 rmSync(join(out, 'app.js'));
 
@@ -122,7 +123,7 @@ const manifest = {
     js: emitFile('', `clif-${version}`, 'js', join(wasmDir, 'clif_wasm.js')),
     wasm: emitFile('', `clif-${version}`, 'wasm', join(wasmDir, 'clif_wasm_bg.wasm')),
   })),
-  assets: { capstone, qemu },
+  assets: { capstone, qemu, qemuWorker },
 };
 writeFileSync(join(out, 'manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`);
 
@@ -136,6 +137,8 @@ writeFileSync(
   join(out, '_headers'),
   [
     '/worker.*.js',
+    `  ${immutable}`,
+    '/qemu-worker.*.js',
     `  ${immutable}`,
     '/app.*.js',
     `  ${immutable}`,

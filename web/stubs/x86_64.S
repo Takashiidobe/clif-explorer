@@ -45,7 +45,7 @@ prot32:
   movl $PML4, %eax
   movl %eax, %cr3
   movl %cr4, %eax
-  orl $0x620, %eax
+  orl $0x40620, %eax
   movl %eax, %cr4
   movl $0xc0000080, %ecx
   rdmsr
@@ -59,6 +59,13 @@ prot32:
 
 .code64
 long64:
+  xorl %ecx, %ecx
+  movl $0xd, %eax
+  cpuid
+  andl $0xe7, %eax
+  xorl %ecx, %ecx
+  xorl %edx, %edx
+  xsetbv
   movw $0x10, %ax
   movw %ax, %ds
   movw %ax, %es
@@ -88,19 +95,27 @@ long64:
   movq 0(%rbx), %rax
   movq 8(%rbx), %rdi
   movq 16(%rbx), %rsi
-  movq 24(%rbx), %rdx
-  movq 32(%rbx), %rcx
-  movq 40(%rbx), %r8
-  movq 48(%rbx), %r9
   leaq done(%rip), %r10
   pushq %r10
   jmpq *%rax
 
 done:
   movq %rax, %r12
-  movq %rdx, %r13
+  movq (%r12), %r13
+  addq $64, %r12
+  movw $0x3f8, %dx
   movb $'R', %al
-  jmp report
+  outb %al, %dx
+  movq %r13, %rax
+  call put64
+  movq %r13, %rcx
+  jrcxz 4f
+.Lresult_bytes:
+  movb (%r12), %al
+  outb %al, %dx
+  incq %r12
+  loop .Lresult_bytes
+  jmp 4f
 
 trap:
   movq 16(%rsp), %r12
