@@ -46,6 +46,13 @@ The page has three tabs:
   restored when you revisit.
 - Share links that restore the program, Cranelift version, target, and flags.
 
+Hover over a decoded instruction in the Assembly tab to see its description;
+hover over its registers and values for operand details.
+RISC-V descriptions come from the
+[RISC-V Unified Database](https://github.com/riscv/riscv-unified-db); x86 and
+AArch64 descriptions come from the
+[ISA Database](https://instructionsets.com/data/).
+
 LLVM ABI extensions, implicit return areas, and RISC-V vector instructions
 are enabled by default. You can override these in the flags panel.
 
@@ -106,3 +113,24 @@ cd web && npm run e2e
 The page ships QEMU (GPL-2.0) and Capstone (BSD, with LLVM-derived parts). Their
 licenses are in `dist/vendor/`. If you host a build, you distribute QEMU and
 must comply with the GPL-2.0, including making its source available.
+
+RISC-V instruction descriptions come from the RISC-V Unified Database
+instruction records, Copyright (c) Qualcomm Technologies, Inc. and/or its
+subsidiaries, under BSD-3-Clause-Clear. The license is in
+`dist/vendor/RISCV-UDB-LICENSE.txt`. The bundled descriptions use the resolved
+database published 2026-10-08 from commit
+`f9f7e6c08ecb397432c3deb587cd1dfa789ba51a`.
+
+x86 and AArch64 instruction descriptions come from the InstructionSets
+instruction dataset under CC0-1.0. The bundled snapshot was generated
+2026-10-13. The compact records are in
+`web/src/x86-instruction-help.json` and
+`web/src/arm-instruction-help.json`; edit these files directly when
+correcting a description.
+
+s390x instruction forms are based on the Go
+[`x/arch` opcode table](https://go.googlesource.com/arch/+/9d90945922a772f53487baa5b1b03f061aebb164/s390x/s390x.csv),
+which is BSD-licensed and generated from IBM's z/Architecture Principles of Operation.
+The concise descriptions are written for this project. The selected records
+are in `web/src/s390x-instruction-help.json`; edit this file directly when
+adding instructions or correcting a description.

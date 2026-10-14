@@ -1,0 +1,2008 @@
+{
+  "source": {
+    "name": "Go x/arch s390x instruction table",
+    "revision": "9d90945922a772f53487baa5b1b03f061aebb164",
+    "license": "BSD-style (Go repository)",
+    "upstream": "IBM z/Architecture Principles of Operation SA22-7832-13"
+  },
+  "instructions": {
+    "lgr": [
+      {
+        "name": "Load 64-bit register",
+        "summary": "Copies the 64-bit value in operand {1} to operand {0}.",
+        "description": "Copies the 64-bit value in operand {1} to operand {0}.",
+        "syntax": "LGR R1,R2",
+        "encoding": "47364@0|//@16|R1@24|R2@28|??@32",
+        "facility": "B904"
+      }
+    ],
+    "lr": [
+      {
+        "name": "Load 32-bit register",
+        "summary": "Copies the low 32-bit value in operand {1} to operand {0}.",
+        "description": "Copies the low 32-bit value in operand {1} to operand {0}.",
+        "syntax": "LR R1,R2",
+        "encoding": "24@0|R1@8|R2@12|??@16",
+        "facility": "18"
+      }
+    ],
+    "lg": [
+      {
+        "name": "Load 64-bit value",
+        "summary": "Loads a 64-bit value from memory at operand {1} into register {0}.",
+        "description": "Loads a 64-bit value from memory at operand {1} into register {0}.",
+        "syntax": "LG R1,D2(X2,B2)",
+        "encoding": "227@0|R1@8|X2@12|B2@16|D2@20|4@40|??@48",
+        "facility": "B"
+      }
+    ],
+    "lgf": [
+      {
+        "name": "Load and sign-extend word",
+        "summary": "Loads a 32-bit value from memory at operand {1}, sign-extends it to 64 bits, and writes it to register {0}.",
+        "description": "Loads a 32-bit value from memory at operand {1}, sign-extends it to 64 bits, and writes it to register {0}.",
+        "syntax": "LGF R1,D2(X2,B2)",
+        "encoding": "227@0|R1@8|X2@12|B2@16|D2@20|20@40|??@48",
+        "facility": "B"
+      }
+    ],
+    "llgf": [
+      {
+        "name": "Load and zero-extend word",
+        "summary": "Loads a 32-bit value from memory at operand {1}, zero-extends it to 64 bits, and writes it to register {0}.",
+        "description": "Loads a 32-bit value from memory at operand {1}, zero-extends it to 64 bits, and writes it to register {0}.",
+        "syntax": "LLGF R1,D2(X2,B2)",
+        "encoding": "227@0|R1@8|X2@12|B2@16|D2@20|22@40|??@48",
+        "facility": "B"
+      }
+    ],
+    "l": [
+      {
+        "name": "Load word",
+        "summary": "Loads a 32-bit value from memory at operand {1} into register {0}.",
+        "description": "Loads a 32-bit value from memory at operand {1} into register {0}.",
+        "syntax": "L R1,D2(X2,B2)",
+        "encoding": "88@0|R1@8|X2@12|B2@16|D2@20|??@32",
+        "facility": "B"
+      }
+    ],
+    "lghi": [
+      {
+        "name": "Load halfword immediate",
+        "summary": "Loads the signed 16-bit immediate {1}, sign-extended to 64 bits, into register {0}.",
+        "description": "Loads the signed 16-bit immediate {1}, sign-extended to 64 bits, into register {0}.",
+        "syntax": "LGHI R1,I2",
+        "encoding": "167@0|R1@8|9@12|I2@16|??@32",
+        "facility": "A79"
+      }
+    ],
+    "lhi": [
+      {
+        "name": "Load halfword immediate",
+        "summary": "Loads the signed 16-bit immediate {1}, sign-extended to 32 bits, into register {0}.",
+        "description": "Loads the signed 16-bit immediate {1}, sign-extended to 32 bits, into register {0}.",
+        "syntax": "LHI R1,I2",
+        "encoding": "167@0|R1@8|8@12|I2@16|??@32",
+        "facility": "A78"
+      }
+    ],
+    "larl": [
+      {
+        "name": "Load address relative long",
+        "summary": "Calculates the address of relative target {1} and stores it in register {0}.",
+        "description": "Calculates the address of relative target {1} and stores it in register {0}.",
+        "syntax": "LARL R1,RI2",
+        "encoding": "192@0|R1@8|0@12|RI2@16|??@48",
+        "facility": "C00"
+      }
+    ],
+    "la": [
+      {
+        "name": "Load address",
+        "summary": "Calculates the effective address described by operand {1} and stores it in register {0}; it does not read memory.",
+        "description": "Calculates the effective address described by operand {1} and stores it in register {0}; it does not read memory.",
+        "syntax": "LA R1,D2(X2,B2)",
+        "encoding": "65@0|R1@8|X2@12|B2@16|D2@20|??@32",
+        "facility": "41"
+      }
+    ],
+    "stg": [
+      {
+        "name": "Store 64-bit value",
+        "summary": "Stores the 64-bit value in register {0} to memory at operand {1}.",
+        "description": "Stores the 64-bit value in register {0} to memory at operand {1}.",
+        "syntax": "STG R1,D2(X2,B2)",
+        "encoding": "227@0|R1@8|X2@12|B2@16|D2@20|36@40|??@48",
+        "facility": "ST"
+      }
+    ],
+    "st": [
+      {
+        "name": "Store word",
+        "summary": "Stores the low 32 bits of register {0} to memory at operand {1}.",
+        "description": "Stores the low 32 bits of register {0} to memory at operand {1}.",
+        "syntax": "ST R1,D2(X2,B2)",
+        "encoding": "80@0|R1@8|X2@12|B2@16|D2@20|??@32",
+        "facility": "ST"
+      }
+    ],
+    "stmg": [
+      {
+        "name": "Store multiple registers",
+        "summary": "Stores registers {0} through {1}, inclusive, to consecutive 64-bit words in memory beginning at operand {2}.",
+        "description": "Stores registers {0} through {1}, inclusive, to consecutive 64-bit words in memory beginning at operand {2}.",
+        "syntax": "STMG R1,R3,D2(B2)",
+        "encoding": "235@0|R1@8|R3@12|B2@16|D2@20|36@40|??@48",
+        "facility": "ST"
+      }
+    ],
+    "lmg": [
+      {
+        "name": "Load multiple registers",
+        "summary": "Loads consecutive 64-bit words from memory beginning at operand {2} into registers {0} through {1}, inclusive.",
+        "description": "Loads consecutive 64-bit words from memory beginning at operand {2} into registers {0} through {1}, inclusive.",
+        "syntax": "LMG R1,R3,D2(B2)",
+        "encoding": "235@0|R1@8|R3@12|B2@16|D2@20|4@40|??@48",
+        "facility": "B"
+      }
+    ],
+    "agr": [
+      {
+        "name": "Add 64-bit registers",
+        "summary": "Adds register {1} to register {0} and stores the 64-bit result in {0}.",
+        "description": "Adds register {1} to register {0} and stores the 64-bit result in {0}. Sets the condition code from the result.",
+        "syntax": "AGR R1,R2",
+        "encoding": "47368@0|//@16|R1@24|R2@28|??@32",
+        "facility": "B908"
+      }
+    ],
+    "ar": [
+      {
+        "name": "Add 32-bit registers",
+        "summary": "Adds register {1} to register {0} and stores the 32-bit result in {0}.",
+        "description": "Adds register {1} to register {0} and stores the 32-bit result in {0}. Sets the condition code from the result.",
+        "syntax": "AR R1,R2",
+        "encoding": "26@0|R1@8|R2@12|??@16",
+        "facility": "1A"
+      }
+    ],
+    "ag": [
+      {
+        "name": "Add 64-bit value",
+        "summary": "Adds the 64-bit value at memory operand {1} to register {0}.",
+        "description": "Adds the 64-bit value at memory operand {1} to register {0}. Sets the condition code from the result.",
+        "syntax": "AG R1,D2(X2,B2)",
+        "encoding": "227@0|R1@8|X2@12|B2@16|D2@20|8@40|??@48",
+        "facility": "B"
+      }
+    ],
+    "a": [
+      {
+        "name": "Add word",
+        "summary": "Adds the 32-bit value at memory operand {1} to register {0}.",
+        "description": "Adds the 32-bit value at memory operand {1} to register {0}. Sets the condition code from the result.",
+        "syntax": "A R1,D2(X2,B2)",
+        "encoding": "90@0|R1@8|X2@12|B2@16|D2@20|??@32",
+        "facility": "B"
+      }
+    ],
+    "aghi": [
+      {
+        "name": "Add halfword immediate",
+        "summary": "Adds the signed 16-bit immediate {1} to register {0} and stores the 64-bit result in {0}.",
+        "description": "Adds the signed 16-bit immediate {1} to register {0} and stores the 64-bit result in {0}. Sets the condition code.",
+        "syntax": "AGHI R1,I2",
+        "encoding": "167@0|R1@8|11@12|I2@16|??@32",
+        "facility": "A7B"
+      }
+    ],
+    "agfi": [
+      {
+        "name": "Add immediate",
+        "summary": "Adds the signed 32-bit immediate {1} to register {0} and stores the 64-bit result in {0}.",
+        "description": "Adds the signed 32-bit immediate {1} to register {0} and stores the 64-bit result in {0}. Sets the condition code.",
+        "syntax": "AGFI R1,I2",
+        "encoding": "194@0|R1@8|8@12|I2@16|??@48",
+        "facility": "C28"
+      }
+    ],
+    "ahi": [
+      {
+        "name": "Add halfword immediate",
+        "summary": "Adds the signed 16-bit immediate {1} to register {0} and stores the 32-bit result in {0}.",
+        "description": "Adds the signed 16-bit immediate {1} to register {0} and stores the 32-bit result in {0}. Sets the condition code.",
+        "syntax": "AHI R1,I2",
+        "encoding": "167@0|R1@8|10@12|I2@16|??@32",
+        "facility": "A7A"
+      }
+    ],
+    "afi": [
+      {
+        "name": "Add immediate",
+        "summary": "Adds the signed 32-bit immediate {1} to register {0} and stores the 32-bit result in {0}.",
+        "description": "Adds the signed 32-bit immediate {1} to register {0} and stores the 32-bit result in {0}. Sets the condition code.",
+        "syntax": "AFI R1,I2",
+        "encoding": "194@0|R1@8|9@12|I2@16|??@48",
+        "facility": "C29"
+      }
+    ],
+    "sgr": [
+      {
+        "name": "Subtract 64-bit registers",
+        "summary": "Subtracts register {1} from register {0} and stores the 64-bit result in {0}.",
+        "description": "Subtracts register {1} from register {0} and stores the 64-bit result in {0}. Sets the condition code.",
+        "syntax": "SGR R1,R2",
+        "encoding": "47369@0|//@16|R1@24|R2@28|??@32",
+        "facility": "B909"
+      }
+    ],
+    "sr": [
+      {
+        "name": "Subtract 32-bit registers",
+        "summary": "Subtracts register {1} from register {0} and stores the 32-bit result in {0}.",
+        "description": "Subtracts register {1} from register {0} and stores the 32-bit result in {0}. Sets the condition code.",
+        "syntax": "SR R1,R2",
+        "encoding": "27@0|R1@8|R2@12|??@16",
+        "facility": "1B"
+      }
+    ],
+    "sg": [
+      {
+        "name": "Subtract 64-bit value",
+        "summary": "Subtracts the 64-bit value at memory operand {1} from register {0}.",
+        "description": "Subtracts the 64-bit value at memory operand {1} from register {0}. Sets the condition code.",
+        "syntax": "SG R1,D2(X2,B2)",
+        "encoding": "227@0|R1@8|X2@12|B2@16|D2@20|9@40|??@48",
+        "facility": "B"
+      }
+    ],
+    "s": [
+      {
+        "name": "Subtract word",
+        "summary": "Subtracts the 32-bit value at memory operand {1} from register {0}.",
+        "description": "Subtracts the 32-bit value at memory operand {1} from register {0}. Sets the condition code.",
+        "syntax": "S R1,D2(X2,B2)",
+        "encoding": "91@0|R1@8|X2@12|B2@16|D2@20|??@32",
+        "facility": "B"
+      }
+    ],
+    "algr": [
+      {
+        "name": "Add logical 64-bit registers",
+        "summary": "Adds register {1} to register {0} as unsigned values and stores the 64-bit result in {0}.",
+        "description": "Adds register {1} to register {0} as unsigned values and stores the 64-bit result in {0}. Sets the condition code, including carry.",
+        "syntax": "ALGR R1,R2",
+        "encoding": "47370@0|//@16|R1@24|R2@28|??@32",
+        "facility": "B90A"
+      }
+    ],
+    "alr": [
+      {
+        "name": "Add logical 32-bit registers",
+        "summary": "Adds register {1} to register {0} as unsigned values and stores the 32-bit result in {0}.",
+        "description": "Adds register {1} to register {0} as unsigned values and stores the 32-bit result in {0}. Sets the condition code, including carry.",
+        "syntax": "ALR R1,R2",
+        "encoding": "30@0|R1@8|R2@12|??@16",
+        "facility": "1E"
+      }
+    ],
+    "msgr": [
+      {
+        "name": "Multiply signed 64-bit registers",
+        "summary": "Multiplies the signed 64-bit values in registers {0} and {1}, storing the result in {0}.",
+        "description": "Multiplies the signed 64-bit values in registers {0} and {1}, storing the result in {0}. Sets the condition code.",
+        "syntax": "MSGR R1,R2",
+        "encoding": "47372@0|//@16|R1@24|R2@28|??@32",
+        "facility": "B90C"
+      }
+    ],
+    "ngr": [
+      {
+        "name": "AND 64-bit registers",
+        "summary": "Performs a bitwise AND of registers {0} and {1}, storing the result in {0} and setting the condition code.",
+        "description": "Performs a bitwise AND of registers {0} and {1}, storing the result in {0} and setting the condition code.",
+        "syntax": "NGR R1,R2",
+        "encoding": "47488@0|//@16|R1@24|R2@28|??@32",
+        "facility": "B980"
+      }
+    ],
+    "nr": [
+      {
+        "name": "AND 32-bit registers",
+        "summary": "Performs a bitwise AND of registers {0} and {1}, storing the result in {0} and setting the condition code.",
+        "description": "Performs a bitwise AND of registers {0} and {1}, storing the result in {0} and setting the condition code.",
+        "syntax": "NR R1,R2",
+        "encoding": "20@0|R1@8|R2@12|??@16",
+        "facility": "14"
+      }
+    ],
+    "ogr": [
+      {
+        "name": "OR 64-bit registers",
+        "summary": "Performs a bitwise OR of registers {0} and {1}, storing the result in {0} and setting the condition code.",
+        "description": "Performs a bitwise OR of registers {0} and {1}, storing the result in {0} and setting the condition code.",
+        "syntax": "OGR R1,R2",
+        "encoding": "47489@0|//@16|R1@24|R2@28|??@32",
+        "facility": "B981"
+      }
+    ],
+    "or": [
+      {
+        "name": "OR 32-bit registers",
+        "summary": "Performs a bitwise OR of registers {0} and {1}, storing the result in {0} and setting the condition code.",
+        "description": "Performs a bitwise OR of registers {0} and {1}, storing the result in {0} and setting the condition code.",
+        "syntax": "OR R1,R2",
+        "encoding": "22@0|R1@8|R2@12|??@16",
+        "facility": "16"
+      }
+    ],
+    "xgr": [
+      {
+        "name": "XOR 64-bit registers",
+        "summary": "Performs a bitwise exclusive OR of registers {0} and {1}, storing the result in {0} and setting the condition code.",
+        "description": "Performs a bitwise exclusive OR of registers {0} and {1}, storing the result in {0} and setting the condition code.",
+        "syntax": "XGR R1,R2",
+        "encoding": "47490@0|//@16|R1@24|R2@28|??@32",
+        "facility": "B982"
+      }
+    ],
+    "xr": [
+      {
+        "name": "XOR 32-bit registers",
+        "summary": "Performs a bitwise exclusive OR of registers {0} and {1}, storing the result in {0} and setting the condition code.",
+        "description": "Performs a bitwise exclusive OR of registers {0} and {1}, storing the result in {0} and setting the condition code.",
+        "syntax": "XR R1,R2",
+        "encoding": "23@0|R1@8|R2@12|??@16",
+        "facility": "17"
+      }
+    ],
+    "cgr": [
+      {
+        "name": "Compare 64-bit registers",
+        "summary": "Compares the signed 64-bit value in register {0} with register {1} and sets the condition code; neither operand is changed.",
+        "description": "Compares the signed 64-bit value in register {0} with register {1} and sets the condition code; neither operand is changed.",
+        "syntax": "CGR R1,R2",
+        "encoding": "47392@0|//@16|R1@24|R2@28|??@32",
+        "facility": "B920"
+      }
+    ],
+    "cr": [
+      {
+        "name": "Compare 32-bit registers",
+        "summary": "Compares the signed 32-bit value in register {0} with register {1} and sets the condition code; neither operand is changed.",
+        "description": "Compares the signed 32-bit value in register {0} with register {1} and sets the condition code; neither operand is changed.",
+        "syntax": "CR R1,R2",
+        "encoding": "25@0|R1@8|R2@12|??@16",
+        "facility": "19"
+      }
+    ],
+    "cg": [
+      {
+        "name": "Compare 64-bit value",
+        "summary": "Compares the signed 64-bit value in register {0} with the value at memory operand {1} and sets the condition code.",
+        "description": "Compares the signed 64-bit value in register {0} with the value at memory operand {1} and sets the condition code.",
+        "syntax": "CG R1,D2(X2,B2)",
+        "encoding": "227@0|R1@8|X2@12|B2@16|D2@20|32@40|??@48",
+        "facility": "B"
+      }
+    ],
+    "c": [
+      {
+        "name": "Compare word",
+        "summary": "Compares the signed 32-bit value in register {0} with the value at memory operand {1} and sets the condition code.",
+        "description": "Compares the signed 32-bit value in register {0} with the value at memory operand {1} and sets the condition code.",
+        "syntax": "C R1,D2(X2,B2)",
+        "encoding": "89@0|R1@8|X2@12|B2@16|D2@20|??@32",
+        "facility": "B"
+      }
+    ],
+    "clgr": [
+      {
+        "name": "Compare logical 64-bit registers",
+        "summary": "Compares registers {0} and {1} as unsigned 64-bit values and sets the condition code; neither operand is changed.",
+        "description": "Compares registers {0} and {1} as unsigned 64-bit values and sets the condition code; neither operand is changed.",
+        "syntax": "CLGR R1,R2",
+        "encoding": "47393@0|//@16|R1@24|R2@28|??@32",
+        "facility": "B921"
+      }
+    ],
+    "clr": [
+      {
+        "name": "Compare logical 32-bit registers",
+        "summary": "Compares registers {0} and {1} as unsigned 32-bit values and sets the condition code; neither operand is changed.",
+        "description": "Compares registers {0} and {1} as unsigned 32-bit values and sets the condition code; neither operand is changed.",
+        "syntax": "CLR R1,R2",
+        "encoding": "21@0|R1@8|R2@12|??@16",
+        "facility": "15"
+      }
+    ],
+    "cghi": [
+      {
+        "name": "Compare halfword immediate",
+        "summary": "Compares the signed 64-bit value in register {0} with the signed immediate {1} and sets the condition code.",
+        "description": "Compares the signed 64-bit value in register {0} with the signed immediate {1} and sets the condition code.",
+        "syntax": "CGHI R1,I2",
+        "encoding": "167@0|R1@8|15@12|I2@16|??@32",
+        "facility": "A7F"
+      }
+    ],
+    "chi": [
+      {
+        "name": "Compare halfword immediate",
+        "summary": "Compares the signed 32-bit value in register {0} with the signed immediate {1} and sets the condition code.",
+        "description": "Compares the signed 32-bit value in register {0} with the signed immediate {1} and sets the condition code.",
+        "syntax": "CHI R1,I2",
+        "encoding": "167@0|R1@8|14@12|I2@16|??@32",
+        "facility": "A7E"
+      }
+    ],
+    "brc": [
+      {
+        "name": "Branch relative on condition",
+        "summary": "Branches to relative target {1} when the current condition code matches mask {0}.",
+        "description": "Branches to relative target {1} when the current condition code matches mask {0}.",
+        "syntax": "BRC M1,RI2",
+        "encoding": "167@0|M1@8|4@12|RI2@16|??@32",
+        "facility": "B"
+      }
+    ],
+    "brcl": [
+      {
+        "name": "Branch relative on condition long",
+        "summary": "Branches to relative target {1} when the current condition code matches mask {0}; this form has a longer reach than BRC.",
+        "description": "Branches to relative target {1} when the current condition code matches mask {0}; this form has a longer reach than BRC.",
+        "syntax": "BRCL M1,RI2",
+        "encoding": "192@0|M1@8|4@12|RI2@16|??@48",
+        "facility": "B"
+      }
+    ],
+    "bcr": [
+      {
+        "name": "Branch on condition",
+        "summary": "Branches to the address in register {1} when the current condition code matches mask {0}.",
+        "description": "Branches to the address in register {1} when the current condition code matches mask {0}.",
+        "syntax": "BCR M1,R2",
+        "encoding": "7@0|M1@8|R2@12|??@16",
+        "facility": "B"
+      }
+    ],
+    "brasl": [
+      {
+        "name": "Branch relative and save long",
+        "summary": "Stores the address of the next instruction in register {0}, then branches to relative target {1}.",
+        "description": "Stores the address of the next instruction in register {0}, then branches to relative target {1}.",
+        "syntax": "BRASL R1,RI2",
+        "encoding": "192@0|R1@8|5@12|RI2@16|??@48",
+        "facility": "B"
+      }
+    ],
+    "basr": [
+      {
+        "name": "Branch and save",
+        "summary": "Stores the address of the next instruction in register {0}, then branches to the address in register {1}.",
+        "description": "Stores the address of the next instruction in register {0}, then branches to the address in register {1}.",
+        "syntax": "BASR R1,R2",
+        "encoding": "13@0|R1@8|R2@12|??@16",
+        "facility": "B"
+      }
+    ],
+    "brctg": [
+      {
+        "name": "Branch relative on count",
+        "summary": "Subtracts 1 from register {0}; if the result is nonzero, branches to relative target {1}.",
+        "description": "Subtracts 1 from register {0}; if the result is nonzero, branches to relative target {1}.",
+        "syntax": "BRCTG R1,RI2",
+        "encoding": "167@0|R1@8|7@12|RI2@16|??@32",
+        "facility": "B"
+      }
+    ],
+    "sllg": [
+      {
+        "name": "Shift left logical 64-bit",
+        "summary": "Shifts register {0} left by the bit count in operand {2}, filling vacated low bits with zero.",
+        "description": "Shifts register {0} left by the bit count in operand {2}, filling vacated low bits with zero.",
+        "syntax": "SLLG R1,R3,D2(B2)",
+        "encoding": "235@0|R1@8|R3@12|B2@16|D2@20|13@40|??@48",
+        "facility": "EB0D"
+      }
+    ],
+    "srlg": [
+      {
+        "name": "Shift right logical 64-bit",
+        "summary": "Shifts register {0} right by the bit count in operand {2}, filling vacated high bits with zero.",
+        "description": "Shifts register {0} right by the bit count in operand {2}, filling vacated high bits with zero.",
+        "syntax": "SRLG R1,R3,D2(B2)",
+        "encoding": "235@0|R1@8|R3@12|B2@16|D2@20|12@40|??@48",
+        "facility": "EB0C"
+      }
+    ],
+    "srag": [
+      {
+        "name": "Shift right arithmetic 64-bit",
+        "summary": "Shifts register {0} right by the bit count in operand {2}, copying the sign bit into vacated high bits.",
+        "description": "Shifts register {0} right by the bit count in operand {2}, copying the sign bit into vacated high bits.",
+        "syntax": "SRAG R1,R3,D2(B2)",
+        "encoding": "235@0|R1@8|R3@12|B2@16|D2@20|10@40|??@48",
+        "facility": "EB0A"
+      }
+    ],
+    "br": [
+      {
+        "name": "Branch indirect",
+        "summary": "Branches to an address in a general-purpose register.",
+        "description": "Branches to the address in register {0}. This assembler mnemonic is an alias for an unconditional BCR.",
+        "syntax": "BR R1",
+        "alias_of": "BCR 15,R1"
+      }
+    ],
+    "va": [
+      {
+        "name": "Vector add",
+        "summary": "Adds corresponding elements from {1} and {2}, placing each result in {0}. M4 selects the integer element width: byte, halfword, word, doubleword, or quadword.",
+        "description": "Adds corresponding elements from {1} and {2}, placing each result in {0}. M4 selects the integer element width: byte, halfword, word, doubleword, or quadword.",
+        "syntax": "VA V1,V2,V3,M4",
+        "encoding": "231@0|V1@8|V2@12|V3@16|//@20|M4@32|RXB@36|243@40|??@48",
+        "facility": "SP Dv"
+      }
+    ],
+    "vn": [
+      {
+        "name": "Vector AND",
+        "summary": "Performs a bitwise AND of {1} and {2}, placing the result in {0}.",
+        "description": "Performs a bitwise AND of {1} and {2}, placing the result in {0}.",
+        "syntax": "VN V1,V2,V3",
+        "encoding": "231@0|V1@8|V2@12|V3@16|//@20|RXB@36|104@40|??@48",
+        "facility": "Dv"
+      }
+    ],
+    "vo": [
+      {
+        "name": "Vector OR",
+        "summary": "Performs a bitwise OR of {1} and {2}, placing the result in {0}.",
+        "description": "Performs a bitwise OR of {1} and {2}, placing the result in {0}.",
+        "syntax": "VO V1,V2,V3",
+        "encoding": "231@0|V1@8|V2@12|V3@16|//@20|RXB@36|106@40|??@48",
+        "facility": "Dv"
+      }
+    ],
+    "vx": [
+      {
+        "name": "Vector XOR",
+        "summary": "Performs a bitwise exclusive OR of {1} and {2}, placing the result in {0}.",
+        "description": "Performs a bitwise exclusive OR of {1} and {2}, placing the result in {0}.",
+        "syntax": "VX V1,V2,V3",
+        "encoding": "231@0|V1@8|V2@12|V3@16|//@20|RXB@36|109@40|??@48",
+        "facility": "Dv"
+      }
+    ],
+    "vl": [
+      {
+        "name": "Vector load",
+        "summary": "Loads 16 bytes from effective address {1} into vector register {0}.",
+        "description": "Loads 16 bytes from effective address {1} into vector register {0}.",
+        "syntax": "VL V1,D2(X2,B2),M3",
+        "encoding": "231@0|V1@8|X2@12|B2@16|D2@20|M3@32|RXB@36|6@40|??@48",
+        "facility": "Dv"
+      }
+    ],
+    "vst": [
+      {
+        "name": "Vector store",
+        "summary": "Stores the 16 bytes in vector register {0} to effective address {1}.",
+        "description": "Stores the 16 bytes in vector register {0} to effective address {1}.",
+        "syntax": "VST V1,D2(X2,B2),M3",
+        "encoding": "231@0|V1@8|X2@12|B2@16|D2@20|M3@32|RXB@36|14@40|??@48",
+        "facility": "Dv"
+      }
+    ],
+    "vlr": [
+      {
+        "name": "Vector load register",
+        "summary": "Copies all 16 bytes from {1} to {0}.",
+        "description": "Copies all 16 bytes from {1} to {0}.",
+        "syntax": "VLR V1,V2",
+        "encoding": "231@0|V1@8|V2@12|//@16|RXB@36|86@40|??@48",
+        "facility": "Dv"
+      }
+    ],
+    "vfa": [
+      {
+        "name": "Vector floating-point add",
+        "summary": "Adds corresponding floating-point elements from {1} and {2}, placing the results in {0}. M4 selects the element format; M5 controls rounding and related behavior.",
+        "description": "Adds corresponding floating-point elements from {1} and {2}, placing the results in {0}. M4 selects the element format; M5 controls rounding and related behavior.",
+        "syntax": "VFA V1,V2,V3,M4,M5",
+        "encoding": "231@0|V1@8|V2@12|V3@16|//@20|M5@28|M4@32|RXB@36|227@40|??@48",
+        "facility": "SP Dv"
+      }
+    ],
+    "vfs": [
+      {
+        "name": "Vector floating-point subtract",
+        "summary": "Subtracts corresponding floating-point elements of {2} from {1}, placing the results in {0}. M4 selects the element format; M5 controls rounding and related behavior.",
+        "description": "Subtracts corresponding floating-point elements of {2} from {1}, placing the results in {0}. M4 selects the element format; M5 controls rounding and related behavior.",
+        "syntax": "VFS V1,V2,V3,M4,M5",
+        "encoding": "231@0|V1@8|V2@12|V3@16|//@20|M5@28|M4@32|RXB@36|226@40|??@48",
+        "facility": "SP Dv"
+      }
+    ],
+    "vfm": [
+      {
+        "name": "Vector floating-point multiply",
+        "summary": "Multiplies corresponding floating-point elements from {1} and {2}, placing the results in {0}. M4 selects the element format; M5 controls rounding and related behavior.",
+        "description": "Multiplies corresponding floating-point elements from {1} and {2}, placing the results in {0}. M4 selects the element format; M5 controls rounding and related behavior.",
+        "syntax": "VFM V1,V2,V3,M4,M5",
+        "encoding": "231@0|V1@8|V2@12|V3@16|//@20|M5@28|M4@32|RXB@36|231@40|??@48",
+        "facility": "SP Dv"
+      }
+    ],
+    "vfd": [
+      {
+        "name": "Vector floating-point divide",
+        "summary": "Divides corresponding floating-point elements of {1} by {2}, placing the results in {0}. M4 selects the element format; M5 controls rounding and related behavior.",
+        "description": "Divides corresponding floating-point elements of {1} by {2}, placing the results in {0}. M4 selects the element format; M5 controls rounding and related behavior.",
+        "syntax": "VFD V1,V2,V3,M4,M5",
+        "encoding": "231@0|V1@8|V2@12|V3@16|//@20|M5@28|M4@32|RXB@36|229@40|??@48",
+        "facility": "SP Dv"
+      }
+    ],
+    "vceq": [
+      {
+        "name": "Vector compare equal",
+        "summary": "Compares corresponding elements of {1} and {2}. Equal elements produce all ones in the corresponding result element of {0}; unequal elements produce zero. M4 selects the element format and M5 controls the comparison.",
+        "description": "Compares corresponding elements of {1} and {2}. Equal elements produce all ones in the corresponding result element of {0}; unequal elements produce zero. M4 selects the element format and M5 controls the comparison.",
+        "syntax": "VCEQ V1,V2,V3,M4,M5",
+        "encoding": "231@0|V1@8|V2@12|V3@16|//@20|M5@24|//@28|M4@32|RXB@36|248@40|??@48",
+        "facility": "SP Dv"
+      }
+    ],
+    "vch": [
+      {
+        "name": "Vector compare high",
+        "summary": "Compares corresponding signed elements of {1} and {2}, setting the result element in {0} to all ones when {1} is greater, otherwise zero. M4 selects the element format and M5 controls the comparison.",
+        "description": "Compares corresponding signed elements of {1} and {2}, setting the result element in {0} to all ones when {1} is greater, otherwise zero. M4 selects the element format and M5 controls the comparison.",
+        "syntax": "VCH V1,V2,V3,M4,M5",
+        "encoding": "231@0|V1@8|V2@12|V3@16|//@20|M5@24|//@28|M4@32|RXB@36|251@40|??@48",
+        "facility": "SP Dv"
+      }
+    ],
+    "vchl": [
+      {
+        "name": "Vector compare high logical",
+        "summary": "Compares corresponding unsigned elements of {1} and {2}, setting the result element in {0} to all ones when {1} is greater, otherwise zero. M4 selects the element format and M5 controls the comparison.",
+        "description": "Compares corresponding unsigned elements of {1} and {2}, setting the result element in {0} to all ones when {1} is greater, otherwise zero. M4 selects the element format and M5 controls the comparison.",
+        "syntax": "VCHL V1,V2,V3,M4,M5",
+        "encoding": "231@0|V1@8|V2@12|V3@16|//@20|M5@24|//@28|M4@32|RXB@36|249@40|??@48",
+        "facility": "SP Dv"
+      }
+    ],
+    "vsel": [
+      {
+        "name": "Vector select",
+        "summary": "Selects each result bit from {1} or {2} using the corresponding mask bit in {3}, and writes the result to {0}.",
+        "description": "Selects each result bit from {1} or {2} using the corresponding mask bit in {3}, and writes the result to {0}.",
+        "syntax": "VSEL V1,V2,V3,V4",
+        "encoding": "231@0|V1@8|V2@12|V3@16|//@20|V4@32|RXB@36|141@40|??@48",
+        "facility": "Dv"
+      }
+    ],
+    "vperm": [
+      {
+        "name": "Vector permute",
+        "summary": "Builds {0} by selecting bytes from {1} and {2}; selector bytes in {3} choose the source byte for each result position.",
+        "description": "Builds {0} by selecting bytes from {1} and {2}; selector bytes in {3} choose the source byte for each result position.",
+        "syntax": "VPERM V1,V2,V3,V4",
+        "encoding": "231@0|V1@8|V2@12|V3@16|//@20|V4@32|RXB@36|140@40|??@48",
+        "facility": "Dv"
+      }
+    ],
+    "vsumq": [
+      {
+        "name": "Vector sum across quadword",
+        "summary": "Adds selected elements of {2} within each quadword group and combines each sum with the corresponding quadword in {1}, writing results to {0}. M4 selects the element width.",
+        "description": "Adds selected elements of {2} within each quadword group and combines each sum with the corresponding quadword in {1}, writing results to {0}. M4 selects the element width.",
+        "syntax": "VSUMQ V1,V2,V3,M4",
+        "encoding": "231@0|V1@8|V2@12|V3@16|//@20|M4@32|RXB@36|103@40|??@48",
+        "facility": "SP Dv"
+      }
+    ],
+    "vleb": [
+      {
+        "name": "Vector load byte element",
+        "summary": "Loads one byte from effective address {1} into the byte position selected by M3 in {0}; other bytes are unchanged.",
+        "description": "Loads one byte from effective address {1} into the byte position selected by M3 in {0}; other bytes are unchanged.",
+        "syntax": "VLEB V1,D2(X2,B2),M3",
+        "encoding": "231@0|V1@8|X2@12|B2@16|D2@20|M3@32|RXB@36|0@40|??@48",
+        "facility": "SP Dv"
+      }
+    ],
+    "vleh": [
+      {
+        "name": "Vector load halfword element",
+        "summary": "Loads one 2-byte element from effective address {1} into the halfword position selected by M3 in {0}; other elements are unchanged.",
+        "description": "Loads one 2-byte element from effective address {1} into the halfword position selected by M3 in {0}; other elements are unchanged.",
+        "syntax": "VLEH V1,D2(X2,B2),M3",
+        "encoding": "231@0|V1@8|X2@12|B2@16|D2@20|M3@32|RXB@36|1@40|??@48",
+        "facility": "SP Dv"
+      }
+    ],
+    "vlef": [
+      {
+        "name": "Vector load word element",
+        "summary": "Loads one 4-byte element from effective address {1} into the word position selected by M3 in {0}; other elements are unchanged.",
+        "description": "Loads one 4-byte element from effective address {1} into the word position selected by M3 in {0}; other elements are unchanged.",
+        "syntax": "VLEF V1,D2(X2,B2),M3",
+        "encoding": "231@0|V1@8|X2@12|B2@16|D2@20|M3@32|RXB@36|3@40|??@48",
+        "facility": "SP Dv"
+      }
+    ],
+    "vleg": [
+      {
+        "name": "Vector load doubleword element",
+        "summary": "Loads one 8-byte element from effective address {1} into the doubleword position selected by M3 in {0}; other elements are unchanged.",
+        "description": "Loads one 8-byte element from effective address {1} into the doubleword position selected by M3 in {0}; other elements are unchanged.",
+        "syntax": "VLEG V1,D2(X2,B2),M3",
+        "encoding": "231@0|V1@8|X2@12|B2@16|D2@20|M3@32|RXB@36|2@40|??@48",
+        "facility": "SP Dv"
+      }
+    ],
+    "vsteb": [
+      {
+        "name": "Vector store byte element",
+        "summary": "Stores the byte selected by M3 in vector register {0} to effective address {1}.",
+        "description": "Stores the byte selected by M3 in vector register {0} to effective address {1}.",
+        "syntax": "VSTEB V1,D2(X2,B2),M3",
+        "encoding": "231@0|V1@8|X2@12|B2@16|D2@20|M3@32|RXB@36|8@40|??@48",
+        "facility": "SP Dv"
+      }
+    ],
+    "vsteh": [
+      {
+        "name": "Vector store halfword element",
+        "summary": "Stores the halfword selected by M3 in vector register {0} to effective address {1}.",
+        "description": "Stores the halfword selected by M3 in vector register {0} to effective address {1}.",
+        "syntax": "VSTEH V1,D2(X2,B2),M3",
+        "encoding": "231@0|V1@8|X2@12|B2@16|D2@20|M3@32|RXB@36|9@40|??@48",
+        "facility": "SP Dv"
+      }
+    ],
+    "vstef": [
+      {
+        "name": "Vector store word element",
+        "summary": "Stores the word selected by M3 in vector register {0} to effective address {1}.",
+        "description": "Stores the word selected by M3 in vector register {0} to effective address {1}.",
+        "syntax": "VSTEF V1,D2(X2,B2),M3",
+        "encoding": "231@0|V1@8|X2@12|B2@16|D2@20|M3@32|RXB@36|11@40|??@48",
+        "facility": "SP Dv"
+      }
+    ],
+    "vsteg": [
+      {
+        "name": "Vector store doubleword element",
+        "summary": "Stores the doubleword selected by M3 in vector register {0} to effective address {1}.",
+        "description": "Stores the doubleword selected by M3 in vector register {0} to effective address {1}.",
+        "syntax": "VSTEG V1,D2(X2,B2),M3",
+        "encoding": "231@0|V1@8|X2@12|B2@16|D2@20|M3@32|RXB@36|10@40|??@48",
+        "facility": "SP Dv"
+      }
+    ],
+    "vlvg": [
+      {
+        "name": "Load vector element from general register",
+        "summary": "Places the value from general register {1} into the element of vector register {0} selected by the displacement and M4.",
+        "description": "Places the value from general register {1} into the element of vector register {0} selected by the displacement and M4.",
+        "syntax": "VLVG V1,R3,D2(B2),M4",
+        "encoding": "231@0|V1@8|R3@12|B2@16|D2@20|M4@32|RXB@36|34@40|??@48",
+        "facility": "SP Dv"
+      }
+    ],
+    "vlgv": [
+      {
+        "name": "Load general register from vector element",
+        "summary": "Loads the vector element selected by the displacement and M4 from {1} into general register {0}.",
+        "description": "Loads the vector element selected by the displacement and M4 from {1} into general register {0}.",
+        "syntax": "VLGV R1,V3,D2(B2),M4",
+        "encoding": "231@0|R1@8|V3@12|B2@16|D2@20|M4@32|RXB@36|33@40|??@48",
+        "facility": "SP Dv"
+      }
+    ],
+    "vlm": [
+      {
+        "name": "Vector load multiple",
+        "summary": "Loads a sequence of vector registers beginning at {0} from memory at {2}, continuing through ending register {1}.",
+        "description": "Loads a sequence of vector registers beginning at {0} from memory at {2}, continuing through ending register {1}.",
+        "syntax": "VLM V1,V3,D2(B2),M4",
+        "encoding": "231@0|V1@8|V3@12|B2@16|D2@20|M4@32|RXB@36|54@40|??@48",
+        "facility": "SP Dv"
+      }
+    ],
+    "vstm": [
+      {
+        "name": "Vector store multiple",
+        "summary": "Stores vector registers beginning at {0} through ending register {1} to memory starting at {2}.",
+        "description": "Stores vector registers beginning at {0} through ending register {1} to memory starting at {2}.",
+        "syntax": "VSTM V1,V3,D2(B2),M4",
+        "encoding": "231@0|V1@8|V3@12|B2@16|D2@20|M4@32|RXB@36|62@40|??@48",
+        "facility": "SP Dv"
+      }
+    ],
+    "vaq": [
+      {
+        "name": "Vector add quadword",
+        "summary": "Adds corresponding quadword elements from {1} and {2}, placing the result in {0}.",
+        "description": "Adds corresponding quadword elements from {1} and {2}, placing the result in {0}. This is the VA extended mnemonic with M4 fixed to 4 (quadword).",
+        "syntax": "VAQ V1,V2,V3",
+        "alias_of": "VA V1,V2,V3,4"
+      }
+    ],
+    "ay": [
+      {
+        "name": "Add",
+        "summary": "Adds the 32-bit value at {1} to {0} and stores the result in {0}.",
+        "description": "Adds the 32-bit value at {1} to {0} and stores the result in {0}.",
+        "syntax": "AY R1,D2(X2,B2)",
+        "encoding": "227@0|R1@8|X2@12|B2@16|D2@20|90@40|??@48",
+        "facility": "B"
+      }
+    ],
+    "agf": [
+      {
+        "name": "Add",
+        "summary": "Adds the sign-extended 32-bit value at {1} to {0}.",
+        "description": "Adds the sign-extended 32-bit value at {1} to {0}.",
+        "syntax": "AGF R1,D2(X2,B2)",
+        "encoding": "227@0|R1@8|X2@12|B2@16|D2@20|24@40|??@48",
+        "facility": "B"
+      }
+    ],
+    "agfr": [
+      {
+        "name": "Add",
+        "summary": "Adds the sign-extended 32-bit value in {1} to {0}.",
+        "description": "Adds the sign-extended 32-bit value in {1} to {0}.",
+        "syntax": "AGFR R1,R2",
+        "encoding": "47384@0|//@16|R1@24|R2@28|??@32",
+        "facility": "B918"
+      }
+    ],
+    "agrk": [
+      {
+        "name": "Add",
+        "summary": "Adds {2} to {1} and stores the result in {0}.",
+        "description": "Adds {2} to {1} and stores the result in {0}.",
+        "syntax": "AGRK R1,R2,R3",
+        "encoding": "47592@0|R3@16|//@20|R1@24|R2@28|??@32",
+        "facility": "B9E8"
+      }
+    ],
+    "ahik": [
+      {
+        "name": "Add",
+        "summary": "Adds immediate {2} to {1} and stores the result in {0}.",
+        "description": "Adds immediate {2} to {1} and stores the result in {0}.",
+        "syntax": "AHIK R1,R3,I2",
+        "encoding": "236@0|R1@8|R3@12|I2@16|//@32|216@40|??@48",
+        "facility": "ECD8"
+      }
+    ],
+    "al": [
+      {
+        "name": "Add",
+        "summary": "Adds the 32-bit value at {1} to {0} as an unsigned integer.",
+        "description": "Adds the 32-bit value at {1} to {0} as an unsigned integer.",
+        "syntax": "AL R1,D2(X2,B2)",
+        "encoding": "94@0|R1@8|X2@12|B2@16|D2@20|??@32",
+        "facility": "B"
+      }
+    ],
+    "alg": [
+      {
+        "name": "Add",
+        "summary": "Adds the 64-bit value at {1} to {0} as an unsigned integer.",
+        "description": "Adds the 64-bit value at {1} to {0} as an unsigned integer.",
+        "syntax": "ALG R1,D2(X2,B2)",
+        "encoding": "227@0|R1@8|X2@12|B2@16|D2@20|10@40|??@48",
+        "facility": "B"
+      }
+    ],
+    "alfi": [
+      {
+        "name": "Add",
+        "summary": "Adds immediate {1} to {0} as unsigned 32-bit integers.",
+        "description": "Adds immediate {1} to {0} as unsigned 32-bit integers.",
+        "syntax": "ALFI R1,I2",
+        "encoding": "194@0|R1@8|11@12|I2@16|??@48",
+        "facility": "C2B"
+      }
+    ],
+    "algfi": [
+      {
+        "name": "Add",
+        "summary": "Adds immediate {1} to {0} as unsigned 64-bit integers.",
+        "description": "Adds immediate {1} to {0} as unsigned 64-bit integers.",
+        "syntax": "ALGFI R1,I2",
+        "encoding": "194@0|R1@8|10@12|I2@16|??@48",
+        "facility": "C2A"
+      }
+    ],
+    "alc": [
+      {
+        "name": "Add",
+        "summary": "Adds the value at {1} and the carry flag to {0}.",
+        "description": "Adds the value at {1} and the carry flag to {0}.",
+        "syntax": "ALC R1,D2(X2,B2)",
+        "encoding": "227@0|R1@8|X2@12|B2@16|D2@20|152@40|??@48",
+        "facility": "B"
+      }
+    ],
+    "alcr": [
+      {
+        "name": "Add",
+        "summary": "Adds {1} and the carry flag to {0}.",
+        "description": "Adds {1} and the carry flag to {0}.",
+        "syntax": "ALCR R1,R2",
+        "encoding": "47512@0|//@16|R1@24|R2@28|??@32",
+        "facility": "B998"
+      }
+    ],
+    "alcg": [
+      {
+        "name": "Add",
+        "summary": "Adds the value at {1} and the carry flag to {0} as a 64-bit result.",
+        "description": "Adds the value at {1} and the carry flag to {0} as a 64-bit result.",
+        "syntax": "ALCG R1,D2(X2,B2)",
+        "encoding": "227@0|R1@8|X2@12|B2@16|D2@20|136@40|??@48",
+        "facility": "B"
+      }
+    ],
+    "alcgr": [
+      {
+        "name": "Add",
+        "summary": "Adds {1} and the carry flag to {0} as a 64-bit result.",
+        "description": "Adds {1} and the carry flag to {0} as a 64-bit result.",
+        "syntax": "ALCGR R1,R2",
+        "encoding": "47496@0|//@16|R1@24|R2@28|??@32",
+        "facility": "B988"
+      }
+    ],
+    "sy": [
+      {
+        "name": "Subtract",
+        "summary": "Subtracts the 32-bit value at {1} from {0}.",
+        "description": "Subtracts the 32-bit value at {1} from {0}.",
+        "syntax": "SY R1,D2(X2,B2)",
+        "encoding": "227@0|R1@8|X2@12|B2@16|D2@20|91@40|??@48",
+        "facility": "B"
+      }
+    ],
+    "sgf": [
+      {
+        "name": "Subtract",
+        "summary": "Subtracts the sign-extended 32-bit value at {1} from {0}.",
+        "description": "Subtracts the sign-extended 32-bit value at {1} from {0}.",
+        "syntax": "SGF R1,D2(X2,B2)",
+        "encoding": "227@0|R1@8|X2@12|B2@16|D2@20|25@40|??@48",
+        "facility": "B"
+      }
+    ],
+    "sgrk": [
+      {
+        "name": "Subtract",
+        "summary": "Subtracts {2} from {1} and stores the result in {0}.",
+        "description": "Subtracts {2} from {1} and stores the result in {0}.",
+        "syntax": "SGRK R1,R2,R3",
+        "encoding": "47593@0|R3@16|//@20|R1@24|R2@28|??@32",
+        "facility": "B9E9"
+      }
+    ],
+    "ms": [
+      {
+        "name": "Multiply",
+        "summary": "Multiplies the signed 32-bit value at {1} by {0} and stores the low 32 bits in {0}.",
+        "description": "Multiplies the signed 32-bit value at {1} by {0} and stores the low 32 bits in {0}.",
+        "syntax": "MS R1,D2(X2,B2)",
+        "encoding": "113@0|R1@8|X2@12|B2@16|D2@20|??@32",
+        "facility": "B"
+      }
+    ],
+    "msr": [
+      {
+        "name": "Multiply",
+        "summary": "Multiplies signed 32-bit values {0} and {1}, keeping the low 32 bits in {0}.",
+        "description": "Multiplies signed 32-bit values {0} and {1}, keeping the low 32 bits in {0}.",
+        "syntax": "MSR R1,R2",
+        "encoding": "45650@0|//@16|R1@24|R2@28|??@32",
+        "facility": "B252"
+      }
+    ],
+    "msg": [
+      {
+        "name": "Multiply",
+        "summary": "Multiplies the signed 64-bit value at {1} by {0} and stores the low 64 bits in {0}.",
+        "description": "Multiplies the signed 64-bit value at {1} by {0} and stores the low 64 bits in {0}.",
+        "syntax": "MSG R1,D2(X2,B2)",
+        "encoding": "227@0|R1@8|X2@12|B2@16|D2@20|12@40|??@48",
+        "facility": "B"
+      }
+    ],
+    "mlgr": [
+      {
+        "name": "Multiply",
+        "summary": "Multiplies unsigned 64-bit values in {0} and {1}, producing a 128-bit result in the register pair beginning at {0}.",
+        "description": "Multiplies unsigned 64-bit values in {0} and {1}, producing a 128-bit result in the register pair beginning at {0}.",
+        "syntax": "MLGR R1,R2",
+        "encoding": "47494@0|//@16|R1@24|R2@28|??@32",
+        "facility": "SP"
+      }
+    ],
+    "mlr": [
+      {
+        "name": "Multiply",
+        "summary": "Multiplies unsigned 32-bit values in {0} and {1}, producing a 64-bit result in the register pair beginning at {0}.",
+        "description": "Multiplies unsigned 32-bit values in {0} and {1}, producing a 64-bit result in the register pair beginning at {0}.",
+        "syntax": "MLR R1,R2",
+        "encoding": "47510@0|//@16|R1@24|R2@28|??@32",
+        "facility": "SP"
+      }
+    ],
+    "dr": [
+      {
+        "name": "Divide",
+        "summary": "Divides the 64-bit dividend in the register pair beginning at {0} by {1}; quotient and remainder are placed in the pair.",
+        "description": "Divides the 64-bit dividend in the register pair beginning at {0} by {1}; quotient and remainder are placed in the pair.",
+        "syntax": "DR R1,R2",
+        "encoding": "29@0|R1@8|R2@12|??@16",
+        "facility": "SP"
+      }
+    ],
+    "d": [
+      {
+        "name": "Divide",
+        "summary": "Divides the 64-bit dividend in the register pair beginning at {0} by the 32-bit value at {1}; the quotient and remainder are placed in the pair.",
+        "description": "Divides the 64-bit dividend in the register pair beginning at {0} by the 32-bit value at {1}; the quotient and remainder are placed in the pair.",
+        "syntax": "D R1,D2(X2,B2)",
+        "encoding": "93@0|R1@8|X2@12|B2@16|D2@20|??@32",
+        "facility": "SP"
+      }
+    ],
+    "dsgr": [
+      {
+        "name": "Divide",
+        "summary": "Divides the signed 128-bit value in the register pair beginning at {0} by {1}, placing quotient in {0} and remainder in {0}+1.",
+        "description": "Divides the signed 128-bit value in the register pair beginning at {0} by {1}, placing quotient in {0} and remainder in {0}+1.",
+        "syntax": "DSGR R1,R2",
+        "encoding": "47373@0|//@16|R1@24|R2@28|??@32",
+        "facility": "SP"
+      }
+    ],
+    "dlgr": [
+      {
+        "name": "Divide",
+        "summary": "Divides the unsigned 128-bit value in the register pair beginning at {0} by {1}, placing quotient and remainder in the pair.",
+        "description": "Divides the unsigned 128-bit value in the register pair beginning at {0} by {1}, placing quotient and remainder in the pair.",
+        "syntax": "DLGR R1,R2",
+        "encoding": "47495@0|//@16|R1@24|R2@28|??@32",
+        "facility": "SP"
+      }
+    ],
+    "cy": [
+      {
+        "name": "Compare",
+        "summary": "Compares {0} with the 32-bit value at {1} and sets the condition code.",
+        "description": "Compares {0} with the 32-bit value at {1} and sets the condition code.",
+        "syntax": "CY R1,D2(X2,B2)",
+        "encoding": "227@0|R1@8|X2@12|B2@16|D2@20|89@40|??@48",
+        "facility": "B"
+      }
+    ],
+    "cfi": [
+      {
+        "name": "Compare",
+        "summary": "Compares {0} with signed immediate {1} and sets the condition code.",
+        "description": "Compares {0} with signed immediate {1} and sets the condition code.",
+        "syntax": "CFI R1,I2",
+        "encoding": "194@0|R1@8|13@12|I2@16|??@48",
+        "facility": "C2D"
+      }
+    ],
+    "cgfi": [
+      {
+        "name": "Compare",
+        "summary": "Compares {0} with signed immediate {1} and sets the condition code.",
+        "description": "Compares {0} with signed immediate {1} and sets the condition code.",
+        "syntax": "CGFI R1,I2",
+        "encoding": "194@0|R1@8|12@12|I2@16|??@48",
+        "facility": "C2C"
+      }
+    ],
+    "cl": [
+      {
+        "name": "Compare",
+        "summary": "Compares {0} with the 32-bit value at {1} as unsigned integers and sets the condition code.",
+        "description": "Compares {0} with the 32-bit value at {1} as unsigned integers and sets the condition code.",
+        "syntax": "CL R1,D2(X2,B2)",
+        "encoding": "85@0|R1@8|X2@12|B2@16|D2@20|??@32",
+        "facility": "B"
+      }
+    ],
+    "clg": [
+      {
+        "name": "Compare",
+        "summary": "Compares {0} with the 64-bit value at {1} as unsigned integers and sets the condition code.",
+        "description": "Compares {0} with the 64-bit value at {1} as unsigned integers and sets the condition code.",
+        "syntax": "CLG R1,D2(X2,B2)",
+        "encoding": "227@0|R1@8|X2@12|B2@16|D2@20|33@40|??@48",
+        "facility": "B"
+      }
+    ],
+    "clfi": [
+      {
+        "name": "Compare",
+        "summary": "Compares {0} with unsigned immediate {1} and sets the condition code.",
+        "description": "Compares {0} with unsigned immediate {1} and sets the condition code.",
+        "syntax": "CLFI R1,I2",
+        "encoding": "194@0|R1@8|15@12|I2@16|??@48",
+        "facility": "C2F"
+      }
+    ],
+    "clgfi": [
+      {
+        "name": "Compare",
+        "summary": "Compares {0} with unsigned immediate {1} and sets the condition code.",
+        "description": "Compares {0} with unsigned immediate {1} and sets the condition code.",
+        "syntax": "CLGFI R1,I2",
+        "encoding": "194@0|R1@8|14@12|I2@16|??@48",
+        "facility": "C2E"
+      }
+    ],
+    "ch": [
+      {
+        "name": "Compare",
+        "summary": "Compares the low 16 bits of {0} with the signed halfword at {1} and sets the condition code.",
+        "description": "Compares the low 16 bits of {0} with the signed halfword at {1} and sets the condition code.",
+        "syntax": "CH R1,D2(X2,B2)",
+        "encoding": "73@0|R1@8|X2@12|B2@16|D2@20|??@32",
+        "facility": "B"
+      }
+    ],
+    "chsi": [
+      {
+        "name": "Compare",
+        "summary": "Compares the signed halfword at {0} with signed immediate {1} and sets the condition code.",
+        "description": "Compares the signed halfword at {0} with signed immediate {1} and sets the condition code.",
+        "syntax": "CHSI D1(B1),I2",
+        "encoding": "58716@0|B1@16|D1@20|I2@32|??@48",
+        "facility": "B"
+      }
+    ],
+    "clc": [
+      {
+        "name": "Compare",
+        "summary": "Compares the byte strings at {0} and {1} and sets the condition code.",
+        "description": "Compares the byte strings at {0} and {1} and sets the condition code.",
+        "syntax": "CLC D1(L1,B1),D2(B2)",
+        "encoding": "213@0|L1@8|B1@16|D1@20|B2@32|D2@36|??@48",
+        "facility": "B"
+      }
+    ],
+    "cli": [
+      {
+        "name": "Compare",
+        "summary": "Compares the byte at {0} with immediate {1} as unsigned values.",
+        "description": "Compares the byte at {0} with immediate {1} as unsigned values.",
+        "syntax": "CLI D1(B1),I2",
+        "encoding": "149@0|I2@8|B1@16|D1@20|??@32",
+        "facility": "B"
+      }
+    ],
+    "cliy": [
+      {
+        "name": "Compare",
+        "summary": "Compares the byte at {0} with immediate {1} as unsigned values.",
+        "description": "Compares the byte at {0} with immediate {1} as unsigned values.",
+        "syntax": "CLIY D1(B1),I2",
+        "encoding": "235@0|I2@8|B1@16|D1@20|85@40|??@48",
+        "facility": "B"
+      }
+    ],
+    "nc": [
+      {
+        "name": "And",
+        "summary": "ANDs the byte strings at {0} and {1}, storing the result at {0}.",
+        "description": "ANDs the byte strings at {0} and {1}, storing the result at {0}.",
+        "syntax": "NC D1(L1,B1),D2(B2)",
+        "encoding": "212@0|L1@8|B1@16|D1@20|B2@32|D2@36|??@48",
+        "facility": "ST"
+      }
+    ],
+    "ni": [
+      {
+        "name": "And",
+        "summary": "ANDs the byte at {0} with immediate {1} and stores the result there.",
+        "description": "ANDs the byte at {0} with immediate {1} and stores the result there.",
+        "syntax": "NI D1(B1),I2",
+        "encoding": "148@0|I2@8|B1@16|D1@20|??@32",
+        "facility": "ST"
+      }
+    ],
+    "niy": [
+      {
+        "name": "And",
+        "summary": "ANDs the byte at {0} with immediate {1} and stores the result there.",
+        "description": "ANDs the byte at {0} with immediate {1} and stores the result there.",
+        "syntax": "NIY D1(B1),I2",
+        "encoding": "235@0|I2@8|B1@16|D1@20|84@40|??@48",
+        "facility": "ST"
+      }
+    ],
+    "o": [
+      {
+        "name": "Or",
+        "summary": "ORs the 32-bit value at {1} into {0}.",
+        "description": "ORs the 32-bit value at {1} into {0}.",
+        "syntax": "O R1,D2(X2,B2)",
+        "encoding": "86@0|R1@8|X2@12|B2@16|D2@20|??@32",
+        "facility": "B"
+      }
+    ],
+    "oi": [
+      {
+        "name": "Or",
+        "summary": "ORs immediate {1} into the byte at {0}.",
+        "description": "ORs immediate {1} into the byte at {0}.",
+        "syntax": "OI D1(B1),I2",
+        "encoding": "150@0|I2@8|B1@16|D1@20|??@32",
+        "facility": "ST"
+      }
+    ],
+    "x": [
+      {
+        "name": "Exclusive OR",
+        "summary": "XORs the 32-bit value at {1} into {0}.",
+        "description": "XORs the 32-bit value at {1} into {0}.",
+        "syntax": "X R1,D2(X2,B2)",
+        "encoding": "87@0|R1@8|X2@12|B2@16|D2@20|??@32",
+        "facility": "B"
+      }
+    ],
+    "xi": [
+      {
+        "name": "Exclusive OR",
+        "summary": "XORs immediate {1} into the byte at {0}.",
+        "description": "XORs immediate {1} into the byte at {0}.",
+        "syntax": "XI D1(B1),I2",
+        "encoding": "151@0|I2@8|B1@16|D1@20|??@32",
+        "facility": "ST"
+      }
+    ],
+    "lay": [
+      {
+        "name": "Load",
+        "summary": "Calculates the effective address {1} and stores it in {0}.",
+        "description": "Calculates the effective address {1} and stores it in {0}.",
+        "syntax": "LAY R1,D2(X2,B2)",
+        "encoding": "227@0|R1@8|X2@12|B2@16|D2@20|113@40|??@48",
+        "facility": "E371"
+      }
+    ],
+    "llgfr": [
+      {
+        "name": "Load",
+        "summary": "Zero-extends the 32-bit value in {1} to 64 bits and stores it in {0}.",
+        "description": "Zero-extends the 32-bit value in {1} to 64 bits and stores it in {0}.",
+        "syntax": "LLGFR R1,R2",
+        "encoding": "47382@0|//@16|R1@24|R2@28|??@32",
+        "facility": "B916"
+      }
+    ],
+    "llgh": [
+      {
+        "name": "Load",
+        "summary": "Loads a halfword from {1}, zero-extends it, and stores it in {0}.",
+        "description": "Loads a halfword from {1}, zero-extends it, and stores it in {0}.",
+        "syntax": "LLGH R1,D2(X2,B2)",
+        "encoding": "227@0|R1@8|X2@12|B2@16|D2@20|145@40|??@48",
+        "facility": "B"
+      }
+    ],
+    "llghr": [
+      {
+        "name": "Load",
+        "summary": "Zero-extends the low halfword of {1} and stores it in {0}.",
+        "description": "Zero-extends the low halfword of {1} and stores it in {0}.",
+        "syntax": "LLGHR R1,R2",
+        "encoding": "47493@0|//@16|R1@24|R2@28|??@32",
+        "facility": "B985"
+      }
+    ],
+    "llgc": [
+      {
+        "name": "Load",
+        "summary": "Loads a byte from {1}, zero-extends it, and stores it in {0}.",
+        "description": "Loads a byte from {1}, zero-extends it, and stores it in {0}.",
+        "syntax": "LLGC R1,D2(X2,B2)",
+        "encoding": "227@0|R1@8|X2@12|B2@16|D2@20|144@40|??@48",
+        "facility": "B"
+      }
+    ],
+    "llcr": [
+      {
+        "name": "Load",
+        "summary": "Zero-extends the low byte of {1} and stores it in {0}.",
+        "description": "Zero-extends the low byte of {1} and stores it in {0}.",
+        "syntax": "LLCR R1,R2",
+        "encoding": "47508@0|//@16|R1@24|R2@28|??@32",
+        "facility": "B994"
+      }
+    ],
+    "llihf": [
+      {
+        "name": "Load",
+        "summary": "Loads immediate {1} into the high 32 bits of {0}, leaving the low half unchanged.",
+        "description": "Loads immediate {1} into the high 32 bits of {0}, leaving the low half unchanged.",
+        "syntax": "LLIHF R1,I2",
+        "encoding": "192@0|R1@8|14@12|I2@16|??@48",
+        "facility": "C0E"
+      }
+    ],
+    "llihh": [
+      {
+        "name": "Load",
+        "summary": "Loads immediate {1} into the high halfword of the high word of {0}.",
+        "description": "Loads immediate {1} into the high halfword of the high word of {0}.",
+        "syntax": "LLIHH R1,I2",
+        "encoding": "165@0|R1@8|12@12|I2@16|??@32",
+        "facility": "A5C"
+      }
+    ],
+    "llihl": [
+      {
+        "name": "Load",
+        "summary": "Loads immediate {1} into the low halfword of the high word of {0}.",
+        "description": "Loads immediate {1} into the low halfword of the high word of {0}.",
+        "syntax": "LLIHL R1,I2",
+        "encoding": "165@0|R1@8|13@12|I2@16|??@32",
+        "facility": "A5D"
+      }
+    ],
+    "llilh": [
+      {
+        "name": "Load",
+        "summary": "Loads immediate {1} into the high halfword of the low word of {0}.",
+        "description": "Loads immediate {1} into the high halfword of the low word of {0}.",
+        "syntax": "LLILH R1,I2",
+        "encoding": "165@0|R1@8|14@12|I2@16|??@32",
+        "facility": "A5E"
+      }
+    ],
+    "llill": [
+      {
+        "name": "Load",
+        "summary": "Loads immediate {1} into the low halfword of {0}.",
+        "description": "Loads immediate {1} into the low halfword of {0}.",
+        "syntax": "LLILL R1,I2",
+        "encoding": "165@0|R1@8|15@12|I2@16|??@32",
+        "facility": "A5F"
+      }
+    ],
+    "lh": [
+      {
+        "name": "Load",
+        "summary": "Loads a signed halfword from {1} and stores the sign-extended value in {0}.",
+        "description": "Loads a signed halfword from {1} and stores the sign-extended value in {0}.",
+        "syntax": "LH R1,D2(X2,B2)",
+        "encoding": "72@0|R1@8|X2@12|B2@16|D2@20|??@32",
+        "facility": "B"
+      }
+    ],
+    "lhy": [
+      {
+        "name": "Load",
+        "summary": "Loads a signed halfword from {1} and stores the sign-extended value in {0}.",
+        "description": "Loads a signed halfword from {1} and stores the sign-extended value in {0}.",
+        "syntax": "LHY R1,D2(X2,B2)",
+        "encoding": "227@0|R1@8|X2@12|B2@16|D2@20|120@40|??@48",
+        "facility": "B"
+      }
+    ],
+    "lgfr": [
+      {
+        "name": "Load",
+        "summary": "Sign-extends the low 32 bits of {1} into {0}.",
+        "description": "Sign-extends the low 32 bits of {1} into {0}.",
+        "syntax": "LGFR R1,R2",
+        "encoding": "47380@0|//@16|R1@24|R2@28|??@32",
+        "facility": "B914"
+      }
+    ],
+    "stc": [
+      {
+        "name": "Store",
+        "summary": "Stores the low byte of {0} at {1}.",
+        "description": "Stores the low byte of {0} at {1}.",
+        "syntax": "STC R1,D2(X2,B2)",
+        "encoding": "66@0|R1@8|X2@12|B2@16|D2@20|??@32",
+        "facility": "ST"
+      }
+    ],
+    "sth": [
+      {
+        "name": "Store",
+        "summary": "Stores the low halfword of {0} at {1}.",
+        "description": "Stores the low halfword of {0} at {1}.",
+        "syntax": "STH R1,D2(X2,B2)",
+        "encoding": "64@0|R1@8|X2@12|B2@16|D2@20|??@32",
+        "facility": "ST"
+      }
+    ],
+    "sty": [
+      {
+        "name": "Store",
+        "summary": "Stores the low 32 bits of {0} at {1}.",
+        "description": "Stores the low 32 bits of {0} at {1}.",
+        "syntax": "STY R1,D2(X2,B2)",
+        "encoding": "227@0|R1@8|X2@12|B2@16|D2@20|80@40|??@48",
+        "facility": "ST"
+      }
+    ],
+    "lm": [
+      {
+        "name": "Load",
+        "summary": "Loads a sequence of general registers from memory beginning at {2}, from {0} through {1}.",
+        "description": "Loads a sequence of general registers from memory beginning at {2}, from {0} through {1}.",
+        "syntax": "LM R1,R3,D2(B2)",
+        "encoding": "152@0|R1@8|R3@12|B2@16|D2@20|??@32",
+        "facility": "B"
+      }
+    ],
+    "mvc": [
+      {
+        "name": "Move",
+        "summary": "Copies the byte string at {1} to the destination byte string at {0}.",
+        "description": "Copies the byte string at {1} to the destination byte string at {0}.",
+        "syntax": "MVC D1(L1,B1),D2(B2)",
+        "encoding": "210@0|L1@8|B1@16|D1@20|B2@32|D2@36|??@48",
+        "facility": "ST"
+      }
+    ],
+    "mvcl": [
+      {
+        "name": "Move",
+        "summary": "Copies a variable-length byte string from the source described by {1} to the destination described by {0}, updating both register pairs.",
+        "description": "Copies a variable-length byte string from the source described by {1} to the destination described by {0}, updating both register pairs.",
+        "syntax": "MVCL R1,R2",
+        "encoding": "14@0|R1@8|R2@12|??@16",
+        "facility": "SP II"
+      }
+    ],
+    "mvcin": [
+      {
+        "name": "Move",
+        "summary": "Copies the byte string at {1} to {0} with each byte inverted.",
+        "description": "Copies the byte string at {1} to {0} with each byte inverted.",
+        "syntax": "MVCIN D1(L1,B1),D2(B2)",
+        "encoding": "232@0|L1@8|B1@16|D1@20|B2@32|D2@36|??@48",
+        "facility": "ST"
+      }
+    ],
+    "xc": [
+      {
+        "name": "Exclusive OR",
+        "summary": "XORs the byte strings at {0} and {1}, storing the result at {0}.",
+        "description": "XORs the byte strings at {0} and {1}, storing the result at {0}.",
+        "syntax": "XC D1(L1,B1),D2(B2)",
+        "encoding": "215@0|L1@8|B1@16|D1@20|B2@32|D2@36|??@48",
+        "facility": "ST"
+      }
+    ],
+    "oc": [
+      {
+        "name": "Or",
+        "summary": "ORs the byte strings at {0} and {1}, storing the result at {0}.",
+        "description": "ORs the byte strings at {0} and {1}, storing the result at {0}.",
+        "syntax": "OC D1(L1,B1),D2(B2)",
+        "encoding": "214@0|L1@8|B1@16|D1@20|B2@32|D2@36|??@48",
+        "facility": "ST"
+      }
+    ],
+    "tr": [
+      {
+        "name": "Translate",
+        "summary": "Translates each byte at {0} through the table beginning at {1}.",
+        "description": "Translates each byte at {0} through the table beginning at {1}.",
+        "syntax": "TR D1(L1,B1),D2(B2)",
+        "encoding": "220@0|L1@8|B1@16|D1@20|B2@32|D2@36|??@48",
+        "facility": "ST"
+      }
+    ],
+    "trt": [
+      {
+        "name": "Translate",
+        "summary": "Translates bytes at {0} using the table at {1} until a table entry signals a match; updates the relevant registers and condition code.",
+        "description": "Translates bytes at {0} using the table at {1} until a table entry signals a match; updates the relevant registers and condition code.",
+        "syntax": "TRT D1(L1,B1),D2(B2)",
+        "encoding": "221@0|L1@8|B1@16|D1@20|B2@32|D2@36|??@48",
+        "facility": "B"
+      }
+    ],
+    "tm": [
+      {
+        "name": "Test",
+        "summary": "Tests the bits selected by mask {1} in the byte at {0} and sets the condition code.",
+        "description": "Tests the bits selected by mask {1} in the byte at {0} and sets the condition code.",
+        "syntax": "TM D1(B1),I2",
+        "encoding": "145@0|I2@8|B1@16|D1@20|??@32",
+        "facility": "B"
+      }
+    ],
+    "icm": [
+      {
+        "name": "Insert",
+        "summary": "Inserts selected bytes from {0} into the low-order bytes selected by mask {1}; sets the condition code from the inserted value.",
+        "description": "Inserts selected bytes from {0} into the low-order bytes selected by mask {1}; sets the condition code from the inserted value.",
+        "syntax": "ICM R1,M3,D2(B2)",
+        "encoding": "191@0|R1@8|M3@12|B2@16|D2@20|??@32",
+        "facility": "B"
+      }
+    ],
+    "stcm": [
+      {
+        "name": "Store",
+        "summary": "Stores selected low-order bytes from {0}, as selected by mask {1}, at {2}.",
+        "description": "Stores selected low-order bytes from {0}, as selected by mask {1}, at {2}.",
+        "syntax": "STCM R1,M3,D2(B2)",
+        "encoding": "190@0|R1@8|M3@12|B2@16|D2@20|??@32",
+        "facility": "ST"
+      }
+    ],
+    "ex": [
+      {
+        "name": "Execute",
+        "summary": "Executes the instruction found at effective address {1}, with bits from {0} used to modify that instruction.",
+        "description": "Executes the instruction found at effective address {1}, with bits from {0} used to modify that instruction.",
+        "syntax": "EX R1,D2(X2,B2)",
+        "encoding": "68@0|R1@8|X2@12|B2@16|D2@20|??@32",
+        "facility": "SP"
+      }
+    ],
+    "exrl": [
+      {
+        "name": "Execute",
+        "summary": "Executes the instruction at relative address {1}, with bits from {0} used to modify it.",
+        "description": "Executes the instruction at relative address {1}, with bits from {0} used to modify it.",
+        "syntax": "EXRL R1,RI2",
+        "encoding": "198@0|R1@8|0@12|RI2@16|??@48",
+        "facility": "C60"
+      }
+    ],
+    "brct": [
+      {
+        "name": "Branch",
+        "summary": "Decrements {0} and branches to {1} if the result is not zero.",
+        "description": "Decrements {0} and branches to {1} if the result is not zero.",
+        "syntax": "BRCT R1,RI2",
+        "encoding": "167@0|R1@8|6@12|RI2@16|??@32",
+        "facility": "B"
+      }
+    ],
+    "bras": [
+      {
+        "name": "Branch",
+        "summary": "Saves the return address in {0} and branches to relative target {1}.",
+        "description": "Saves the return address in {0} and branches to relative target {1}.",
+        "syntax": "BRAS R1,RI2",
+        "encoding": "167@0|R1@8|5@12|RI2@16|??@32",
+        "facility": "B"
+      }
+    ],
+    "balr": [
+      {
+        "name": "Branch",
+        "summary": "Saves the return address in {0} and branches to the address in {1}.",
+        "description": "Saves the return address in {0} and branches to the address in {1}.",
+        "syntax": "BALR R1,R2",
+        "encoding": "5@0|R1@8|R2@12|??@16",
+        "facility": "B"
+      }
+    ],
+    "bct": [
+      {
+        "name": "Branch",
+        "summary": "Decrements {0} and branches to {1} if the result is not zero.",
+        "description": "Decrements {0} and branches to {1} if the result is not zero.",
+        "syntax": "BCT R1,D2(X2,B2)",
+        "encoding": "70@0|R1@8|X2@12|B2@16|D2@20|??@32",
+        "facility": "B"
+      }
+    ],
+    "bctr": [
+      {
+        "name": "Branch",
+        "summary": "Decrements {0} and branches to {1} if the result is not zero.",
+        "description": "Decrements {0} and branches to {1} if the result is not zero.",
+        "syntax": "BCTR R1,R2",
+        "encoding": "6@0|R1@8|R2@12|??@16",
+        "facility": "B"
+      }
+    ],
+    "bctg": [
+      {
+        "name": "Branch",
+        "summary": "Decrements {0} and branches to {1} if the result is not zero.",
+        "description": "Decrements {0} and branches to {1} if the result is not zero.",
+        "syntax": "BCTG R1,D2(X2,B2)",
+        "encoding": "227@0|R1@8|X2@12|B2@16|D2@20|70@40|??@48",
+        "facility": "B"
+      }
+    ],
+    "bctgr": [
+      {
+        "name": "Branch",
+        "summary": "Decrements {0} and branches to the address in {1} if the result is not zero.",
+        "description": "Decrements {0} and branches to the address in {1} if the result is not zero.",
+        "syntax": "BCTGR R1,R2",
+        "encoding": "47430@0|//@16|R1@24|R2@28|??@32",
+        "facility": "B"
+      }
+    ],
+    "sll": [
+      {
+        "name": "Shift",
+        "summary": "Shifts the 32-bit value in {0} left by the count encoded in address operand {1}; vacated low bits are zero-filled.",
+        "description": "Shifts the 32-bit value in {0} left by the count encoded in address operand {1}; vacated low bits are zero-filled.",
+        "syntax": "SLL R1,D2(B2)",
+        "encoding": "137@0|R1@8|//@12|B2@16|D2@20|??@32",
+        "facility": "89"
+      }
+    ],
+    "srl": [
+      {
+        "name": "Shift",
+        "summary": "Shifts the 32-bit value in {0} right logically by the count encoded in address operand {1}; vacated high bits are zero-filled.",
+        "description": "Shifts the 32-bit value in {0} right logically by the count encoded in address operand {1}; vacated high bits are zero-filled.",
+        "syntax": "SRL R1,D2(B2)",
+        "encoding": "136@0|R1@8|//@12|B2@16|D2@20|??@32",
+        "facility": "88"
+      }
+    ],
+    "sla": [
+      {
+        "name": "Shift",
+        "summary": "Shifts the 32-bit value in {0} left arithmetically by the count encoded in address operand {1}.",
+        "description": "Shifts the 32-bit value in {0} left arithmetically by the count encoded in address operand {1}.",
+        "syntax": "SLA R1,D2(B2)",
+        "encoding": "139@0|R1@8|//@12|B2@16|D2@20|??@32",
+        "facility": "8B"
+      }
+    ],
+    "sra": [
+      {
+        "name": "Shift",
+        "summary": "Shifts the 32-bit value in {0} right arithmetically by the count encoded in address operand {1}, preserving its sign.",
+        "description": "Shifts the 32-bit value in {0} right arithmetically by the count encoded in address operand {1}, preserving its sign.",
+        "syntax": "SRA R1,D2(B2)",
+        "encoding": "138@0|R1@8|//@12|B2@16|D2@20|??@32",
+        "facility": "8A"
+      }
+    ],
+    "slag": [
+      {
+        "name": "Shift",
+        "summary": "Shifts the 64-bit value in {1} left arithmetically by the count encoded in address operand {2}, storing the result in {0}.",
+        "description": "Shifts the 64-bit value in {1} left arithmetically by the count encoded in address operand {2}, storing the result in {0}.",
+        "syntax": "SLAG R1,R3,D2(B2)",
+        "encoding": "235@0|R1@8|R3@12|B2@16|D2@20|11@40|??@48",
+        "facility": "EB0B"
+      }
+    ],
+    "sllk": [
+      {
+        "name": "Shift",
+        "summary": "Shifts {2} left logically by the count encoded in {1}, storing the result in {0}.",
+        "description": "Shifts {2} left logically by the count encoded in {1}, storing the result in {0}.",
+        "syntax": "SLLK R1,R3,D2(B2)",
+        "encoding": "235@0|R1@8|R3@12|B2@16|D2@20|223@40|??@48",
+        "facility": "EBDF"
+      }
+    ],
+    "srlk": [
+      {
+        "name": "Shift",
+        "summary": "Shifts {2} right logically by the count encoded in {1}, storing the result in {0}.",
+        "description": "Shifts {2} right logically by the count encoded in {1}, storing the result in {0}.",
+        "syntax": "SRLK R1,R3,D2(B2)",
+        "encoding": "235@0|R1@8|R3@12|B2@16|D2@20|222@40|??@48",
+        "facility": "EBDE 7-387"
+      }
+    ],
+    "popcnt": [
+      {
+        "name": "Population count",
+        "summary": "Counts the one bits in {1} and stores the count in {0}; M3 selects the element size.",
+        "description": "Counts the one bits in {1} and stores the count in {0}; M3 selects the element size.",
+        "syntax": "POPCNT R1,R2,M3",
+        "encoding": "47585@0|M3@16|//@20|R1@24|R2@28|??@32",
+        "facility": "B9E1"
+      }
+    ],
+    "flogr": [
+      {
+        "name": "Find",
+        "summary": "Finds the leftmost one bit in {1}; stores its position and the remaining value in the register pair beginning at {0}.",
+        "description": "Finds the leftmost one bit in {1}; stores its position and the remaining value in the register pair beginning at {0}.",
+        "syntax": "FLOGR R1,R2",
+        "encoding": "47491@0|//@16|R1@24|R2@28|??@32",
+        "facility": "SP"
+      }
+    ],
+    "risbg": [
+      {
+        "name": "Rotate",
+        "summary": "Rotates {1}, selects the bit range specified by {2} and {3}, and inserts it into {0} starting at bit position {4}.",
+        "description": "Rotates {1}, selects the bit range specified by {2} and {3}, and inserts it into {0} starting at bit position {4}.",
+        "syntax": "RISBG R1,R2,I3,I4,I5",
+        "encoding": "236@0|R1@8|R2@12|I3@16|I4@24|I5@32|85@40|??@48",
+        "facility": "EC55"
+      }
+    ],
+    "risbgn": [
+      {
+        "name": "Rotate",
+        "summary": "Rotates {1}, selects the bit range specified by {2} and {3}, and inserts it into {0} starting at bit position {4}.",
+        "description": "Rotates {1}, selects the bit range specified by {2} and {3}, and inserts it into {0} starting at bit position {4}.",
+        "syntax": "RISBGN R1,R2,I3,I4,I5",
+        "encoding": "236@0|R1@8|R2@12|I3@16|I4@24|I5@32|89@40|??@48",
+        "facility": "EC59"
+      }
+    ],
+    "rnsbg": [
+      {
+        "name": "Rotate",
+        "summary": "Rotates {1}, ANDs the selected bit range into {0}, and writes the result to {0}.",
+        "description": "Rotates {1}, ANDs the selected bit range into {0}, and writes the result to {0}.",
+        "syntax": "RNSBG R1,R2,I3,I4,I5",
+        "encoding": "236@0|R1@8|R2@12|I3@16|I4@24|I5@32|84@40|??@48",
+        "facility": "EC54"
+      }
+    ],
+    "rosbg": [
+      {
+        "name": "Rotate",
+        "summary": "Rotates {1}, ORs the selected bit range into {0}, and writes the result to {0}.",
+        "description": "Rotates {1}, ORs the selected bit range into {0}, and writes the result to {0}.",
+        "syntax": "ROSBG R1,R2,I3,I4,I5",
+        "encoding": "236@0|R1@8|R2@12|I3@16|I4@24|I5@32|86@40|??@48",
+        "facility": "EC56"
+      }
+    ],
+    "rll": [
+      {
+        "name": "Rotate",
+        "summary": "Rotates the 32-bit value in {1} left by the count encoded in address operand {2}, storing the result in {0}.",
+        "description": "Rotates the 32-bit value in {1} left by the count encoded in address operand {2}, storing the result in {0}.",
+        "syntax": "RLL R1,R3,D2(B2)",
+        "encoding": "235@0|R1@8|R3@12|B2@16|D2@20|29@40|??@48",
+        "facility": "EB1D"
+      }
+    ],
+    "rllg": [
+      {
+        "name": "Rotate",
+        "summary": "Rotates the 64-bit value in {1} left by the count encoded in address operand {2}, storing the result in {0}.",
+        "description": "Rotates the 64-bit value in {1} left by the count encoded in address operand {2}, storing the result in {0}.",
+        "syntax": "RLLG R1,R3,D2(B2)",
+        "encoding": "235@0|R1@8|R3@12|B2@16|D2@20|28@40|??@48",
+        "facility": "EB1C"
+      }
+    ],
+    "lgrl": [
+      {
+        "name": "Load",
+        "summary": "Loads the 64-bit value at relative address {1} into {0}.",
+        "description": "Loads the 64-bit value at relative address {1} into {0}.",
+        "syntax": "LGRL R1,RI2",
+        "encoding": "196@0|R1@8|8@12|RI2@16|??@48",
+        "facility": "SP"
+      }
+    ],
+    "lgh": [
+      {
+        "name": "Load",
+        "summary": "Loads a signed halfword from {1} and sign-extends it into {0}.",
+        "description": "Loads a signed halfword from {1} and sign-extends it into {0}.",
+        "syntax": "LGH R1,D2(X2,B2)",
+        "encoding": "227@0|R1@8|X2@12|B2@16|D2@20|21@40|??@48",
+        "facility": "B"
+      }
+    ],
+    "lgb": [
+      {
+        "name": "Load",
+        "summary": "Loads a signed byte from {1} and sign-extends it into {0}.",
+        "description": "Loads a signed byte from {1} and sign-extends it into {0}.",
+        "syntax": "LGB R1,D2(X2,B2)",
+        "encoding": "227@0|R1@8|X2@12|B2@16|D2@20|119@40|??@48",
+        "facility": "E377"
+      }
+    ],
+    "llhr": [
+      {
+        "name": "Load",
+        "summary": "Zero-extends the low halfword of {1} into {0}.",
+        "description": "Zero-extends the low halfword of {1} into {0}.",
+        "syntax": "LLHR R1,R2",
+        "encoding": "47509@0|//@16|R1@24|R2@28|??@32",
+        "facility": "B995"
+      }
+    ],
+    "llh": [
+      {
+        "name": "Load",
+        "summary": "Loads an unsigned halfword from {1} and stores the zero-extended value in {0}.",
+        "description": "Loads an unsigned halfword from {1} and stores the zero-extended value in {0}.",
+        "syntax": "LLH R1,D2(X2,B2)",
+        "encoding": "227@0|R1@8|X2@12|B2@16|D2@20|149@40|??@48",
+        "facility": "B"
+      }
+    ],
+    "lbr": [
+      {
+        "name": "Load",
+        "summary": "Sign-extends the low byte of {1} into {0}.",
+        "description": "Sign-extends the low byte of {1} into {0}.",
+        "syntax": "LBR R1,R2",
+        "encoding": "47398@0|//@16|R1@24|R2@28|??@32",
+        "facility": "B926"
+      }
+    ],
+    "brxh": [
+      {
+        "name": "Branch",
+        "summary": "Adds {1} to {0} and branches to {2} if the updated index is greater than the limit in {1}.",
+        "description": "Adds {1} to {0} and branches to {2} if the updated index is greater than the limit in {1}.",
+        "syntax": "BRXH R1,R3,RI2",
+        "encoding": "132@0|R1@8|R3@12|RI2@16|??@32",
+        "facility": "B"
+      }
+    ],
+    "brxle": [
+      {
+        "name": "Branch",
+        "summary": "Adds {1} to {0} and branches to {2} if the updated index is less than or equal to the limit in {1}.",
+        "description": "Adds {1} to {0} and branches to {2} if the updated index is less than or equal to the limit in {1}.",
+        "syntax": "BRXLE R1,R3,RI2",
+        "encoding": "133@0|R1@8|R3@12|RI2@16|??@32",
+        "facility": "B"
+      }
+    ],
+    "aebr": [
+      {
+        "name": "Add",
+        "summary": "Adds the short floating-point value in {1} to {0}.",
+        "description": "Adds the short floating-point value in {1} to {0}.",
+        "syntax": "AEBR R1,R2",
+        "encoding": "45834@0|//@16|R1@24|R2@28|??@32",
+        "facility": "Db"
+      }
+    ],
+    "adbr": [
+      {
+        "name": "Add",
+        "summary": "Adds the long floating-point value in {1} to {0}.",
+        "description": "Adds the long floating-point value in {1} to {0}.",
+        "syntax": "ADBR R1,R2",
+        "encoding": "45850@0|//@16|R1@24|R2@28|??@32",
+        "facility": "Db"
+      }
+    ],
+    "sebr": [
+      {
+        "name": "Subtract",
+        "summary": "Subtracts the short floating-point value in {1} from {0}.",
+        "description": "Subtracts the short floating-point value in {1} from {0}.",
+        "syntax": "SEBR R1,R2",
+        "encoding": "45835@0|//@16|R1@24|R2@28|??@32",
+        "facility": "Db"
+      }
+    ],
+    "sdbr": [
+      {
+        "name": "Subtract",
+        "summary": "Subtracts the long floating-point value in {1} from {0}.",
+        "description": "Subtracts the long floating-point value in {1} from {0}.",
+        "syntax": "SDBR R1,R2",
+        "encoding": "45851@0|//@16|R1@24|R2@28|??@32",
+        "facility": "Db"
+      }
+    ],
+    "meebr": [
+      {
+        "name": "Multiply",
+        "summary": "Multiplies the short floating-point value in {0} by {1}.",
+        "description": "Multiplies the short floating-point value in {0} by {1}.",
+        "syntax": "MEEBR R1,R2",
+        "encoding": "45847@0|//@16|R1@24|R2@28|??@32",
+        "facility": "Db"
+      }
+    ],
+    "mdbr": [
+      {
+        "name": "Multiply",
+        "summary": "Multiplies the long floating-point value in {0} by {1}.",
+        "description": "Multiplies the long floating-point value in {0} by {1}.",
+        "syntax": "MDBR R1,R2",
+        "encoding": "45852@0|//@16|R1@24|R2@28|??@32",
+        "facility": "Db"
+      }
+    ],
+    "debr": [
+      {
+        "name": "Divide",
+        "summary": "Divides the short floating-point value in {0} by {1}.",
+        "description": "Divides the short floating-point value in {0} by {1}.",
+        "syntax": "DEBR R1,R2",
+        "encoding": "45837@0|//@16|R1@24|R2@28|??@32",
+        "facility": "Db"
+      }
+    ],
+    "ddbr": [
+      {
+        "name": "Divide",
+        "summary": "Divides the long floating-point value in {0} by {1}.",
+        "description": "Divides the long floating-point value in {0} by {1}.",
+        "syntax": "DDBR R1,R2",
+        "encoding": "45853@0|//@16|R1@24|R2@28|??@32",
+        "facility": "Db"
+      }
+    ],
+    "cebr": [
+      {
+        "name": "Compare",
+        "summary": "Compares the short floating-point values in {0} and {1} and sets the condition code.",
+        "description": "Compares the short floating-point values in {0} and {1} and sets the condition code.",
+        "syntax": "CEBR R1,R2",
+        "encoding": "45833@0|//@16|R1@24|R2@28|??@32",
+        "facility": "Db"
+      }
+    ],
+    "ceb": [
+      {
+        "name": "Compare",
+        "summary": "Compares the short floating-point value in {0} with the value at {1} and sets the condition code.",
+        "description": "Compares the short floating-point value in {0} with the value at {1} and sets the condition code.",
+        "syntax": "CEB R1,D2(X2,B2)",
+        "encoding": "237@0|R1@8|X2@12|B2@16|D2@20|//@32|9@40|??@48",
+        "facility": "Db"
+      }
+    ],
+    "cer": [
+      {
+        "name": "Compare",
+        "summary": "Compares the short floating-point values in {0} and {1} and sets the condition code.",
+        "description": "Compares the short floating-point values in {0} and {1} and sets the condition code.",
+        "syntax": "CER R1,R2",
+        "encoding": "57@0|R1@8|R2@12|??@16",
+        "facility": "Da"
+      }
+    ],
+    "cdb": [
+      {
+        "name": "Compare",
+        "summary": "Compares the long floating-point value in {0} with the value at {1} and sets the condition code.",
+        "description": "Compares the long floating-point value in {0} with the value at {1} and sets the condition code.",
+        "syntax": "CDB R1,D2(X2,B2)",
+        "encoding": "237@0|R1@8|X2@12|B2@16|D2@20|//@32|25@40|??@48",
+        "facility": "Db"
+      }
+    ],
+    "cdbr": [
+      {
+        "name": "Compare",
+        "summary": "Compares the long floating-point values in {0} and {1} and sets the condition code.",
+        "description": "Compares the long floating-point values in {0} and {1} and sets the condition code.",
+        "syntax": "CDBR R1,R2",
+        "encoding": "45849@0|//@16|R1@24|R2@28|??@32",
+        "facility": "Db"
+      }
+    ]
+  }
+}
