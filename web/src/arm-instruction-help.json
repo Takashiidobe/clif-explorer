@@ -1560,6 +1560,46 @@
         "isa": [
           "A64"
         ]
+      },
+      {
+        "name": "Negate",
+        "summary": "Negates Wn and writes the result to Wd.",
+        "description": "Negates Wn and writes the result to Wd.",
+        "syntax": "NEG <Wd>, <Wn>",
+        "operands": [
+          {
+            "name": "Wd",
+            "desc": "Destination register"
+          },
+          {
+            "name": "Wn",
+            "desc": "Source register"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
+      },
+      {
+        "name": "Negate",
+        "summary": "Negates Xn and writes the result to Xd.",
+        "description": "Negates Xn and writes the result to Xd.",
+        "syntax": "NEG <Xd>, <Xn>",
+        "operands": [
+          {
+            "name": "Xd",
+            "desc": "Destination register"
+          },
+          {
+            "name": "Xn",
+            "desc": "Source register"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
       }
     ],
     "not": [
@@ -1652,6 +1692,30 @@
         "isa": [
           "A64"
         ]
+      },
+      {
+        "name": "Signed Divide",
+        "summary": "Divides two signed registers.",
+        "description": "Divides two signed registers.",
+        "syntax": "SDIV <Xd>, <Xn>, <Xm>",
+        "operands": [
+          {
+            "name": "Xd",
+            "desc": "Destination 64-bit integer register"
+          },
+          {
+            "name": "Xn",
+            "desc": "Dividend"
+          },
+          {
+            "name": "Xm",
+            "desc": "Divisor"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
       }
     ],
     "udiv": [
@@ -1695,6 +1759,30 @@
           },
           {
             "name": "Wm",
+            "desc": "Divisor"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
+      },
+      {
+        "name": "Unsigned Divide",
+        "summary": "Divides two unsigned registers.",
+        "description": "Divides two unsigned registers.",
+        "syntax": "UDIV <Xd>, <Xn>, <Xm>",
+        "operands": [
+          {
+            "name": "Xd",
+            "desc": "Destination 64-bit integer register"
+          },
+          {
+            "name": "Xn",
+            "desc": "Dividend"
+          },
+          {
+            "name": "Xm",
             "desc": "Divisor"
           }
         ],
@@ -4974,6 +5062,30 @@
         "isa": [
           "A64"
         ]
+      },
+      {
+        "name": "Logical Shift Left (Register)",
+        "summary": "Shifts register left by variable amount.",
+        "description": "Shifts register left by variable amount.",
+        "syntax": "LSLV <Xd>, <Xn>, <Xm>",
+        "operands": [
+          {
+            "name": "Xd",
+            "desc": "Destination 64-bit integer register"
+          },
+          {
+            "name": "Xn",
+            "desc": "First source / base 64-bit integer register"
+          },
+          {
+            "name": "Xm",
+            "desc": "Shift Reg"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
       }
     ],
     "lsr": [
@@ -5021,6 +5133,30 @@
           }
         ],
         "extension": "SVE",
+        "isa": [
+          "A64"
+        ]
+      },
+      {
+        "name": "Logical Shift Right (Register)",
+        "summary": "Shifts register right by variable amount.",
+        "description": "Shifts register right by variable amount.",
+        "syntax": "LSRV <Xd>, <Xn>, <Xm>",
+        "operands": [
+          {
+            "name": "Xd",
+            "desc": "Destination 64-bit integer register"
+          },
+          {
+            "name": "Xn",
+            "desc": "First source / base 64-bit integer register"
+          },
+          {
+            "name": "Xm",
+            "desc": "Shift Reg"
+          }
+        ],
+        "extension": "Base",
         "isa": [
           "A64"
         ]
@@ -5138,6 +5274,30 @@
         "isa": [
           "A64"
         ]
+      },
+      {
+        "name": "Move Keep",
+        "summary": "Inserts a 16-bit immediate into a register, keeping other bits unchanged.",
+        "description": "Inserts a 16-bit immediate into a register, keeping other bits unchanged.",
+        "syntax": "MOVK <Xd>, #<imm16> {, lsl #<shift>}",
+        "operands": [
+          {
+            "name": "Xd",
+            "desc": "Destination 64-bit integer register"
+          },
+          {
+            "name": "imm16",
+            "desc": "Imm"
+          },
+          {
+            "name": "shift",
+            "desc": "Shift (0,16)"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
       }
     ],
     "movn": [
@@ -5164,6 +5324,30 @@
         "isa": [
           "A64"
         ]
+      },
+      {
+        "name": "Move Not",
+        "summary": "Moves inverted 16-bit immediate to register.",
+        "description": "Moves inverted 16-bit immediate to register.",
+        "syntax": "MOVN <Xd>, #<imm16> {, lsl #<shift>}",
+        "operands": [
+          {
+            "name": "Xd",
+            "desc": "Destination 64-bit integer register"
+          },
+          {
+            "name": "imm16",
+            "desc": "Imm"
+          },
+          {
+            "name": "shift",
+            "desc": "Shift amount"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
       }
     ],
     "movz": [
@@ -5176,6 +5360,30 @@
           {
             "name": "Wd",
             "desc": "Destination 32-bit integer register"
+          },
+          {
+            "name": "imm16",
+            "desc": "Imm"
+          },
+          {
+            "name": "shift",
+            "desc": "Shift amount"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
+      },
+      {
+        "name": "Move Zero",
+        "summary": "Moves 16-bit immediate to register, zeroing other bits.",
+        "description": "Moves 16-bit immediate to register, zeroing other bits.",
+        "syntax": "MOVZ <Xd>, #<imm16> {, lsl #<shift>}",
+        "operands": [
+          {
+            "name": "Xd",
+            "desc": "Destination 64-bit integer register"
           },
           {
             "name": "imm16",
@@ -5284,6 +5492,30 @@
         "isa": [
           "A64"
         ]
+      },
+      {
+        "name": "Bitwise OR NOT",
+        "summary": "ORs register with NOT of shifted register.",
+        "description": "ORs register with NOT of shifted register.",
+        "syntax": "ORN <Xd>, <Xn>, <Xm> {, <shift> #<amount>}",
+        "operands": [
+          {
+            "name": "Xd",
+            "desc": "Destination 64-bit integer register"
+          },
+          {
+            "name": "Xn",
+            "desc": "First source / base 64-bit integer register"
+          },
+          {
+            "name": "Xm",
+            "desc": "Second source / offset 64-bit integer register"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
       }
     ],
     "orr": [
@@ -5382,6 +5614,30 @@
         "isa": [
           "A64"
         ]
+      },
+      {
+        "name": "Bitwise OR (Shifted Register)",
+        "summary": "ORs two registers.",
+        "description": "ORs two registers.",
+        "syntax": "ORR <Xd>, <Xn>, <Xm> {, <shift> #<amount>}",
+        "operands": [
+          {
+            "name": "Xd",
+            "desc": "Destination 64-bit integer register"
+          },
+          {
+            "name": "Xn",
+            "desc": "First source / base 64-bit integer register"
+          },
+          {
+            "name": "Xm",
+            "desc": "Second source / offset 64-bit integer register"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
       }
     ],
     "ret": [
@@ -5427,8 +5683,8 @@
     "rev32": [
       {
         "name": "Reverse Bytes in Words",
-        "summary": "Reverses bytes in each 32-bit word (64-bit op).",
-        "description": "Reverses bytes in each 32-bit word (64-bit op).",
+        "summary": "Reverses bytes in each 64-bit word (64-bit op).",
+        "description": "Reverses bytes in each 64-bit word (64-bit op).",
         "syntax": "REV32 <Xd>, <Xn>",
         "operands": [
           {
@@ -5496,6 +5752,30 @@
         "isa": [
           "A64"
         ]
+      },
+      {
+        "name": "Subtract with Carry",
+        "summary": "Subtracts with borrow (Carry - 1).",
+        "description": "Subtracts with borrow (Carry - 1).",
+        "syntax": "SBC <Xd>, <Xn>, <Xm>",
+        "operands": [
+          {
+            "name": "Xd",
+            "desc": "Destination 64-bit integer register"
+          },
+          {
+            "name": "Xn",
+            "desc": "First source / base 64-bit integer register"
+          },
+          {
+            "name": "Xm",
+            "desc": "Second source / offset 64-bit integer register"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
       }
     ],
     "sbcs": [
@@ -5516,6 +5796,30 @@
           {
             "name": "Wm",
             "desc": "Second source / offset 32-bit integer register"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
+      },
+      {
+        "name": "Subtract with Carry and Set Flags",
+        "summary": "Subtracts with borrow and updates flags.",
+        "description": "Subtracts with borrow and updates flags.",
+        "syntax": "SBCS <Xd>, <Xn>, <Xm>",
+        "operands": [
+          {
+            "name": "Xd",
+            "desc": "Destination 64-bit integer register"
+          },
+          {
+            "name": "Xn",
+            "desc": "First source / base 64-bit integer register"
+          },
+          {
+            "name": "Xm",
+            "desc": "Second source / offset 64-bit integer register"
           }
         ],
         "extension": "Base",
@@ -5557,8 +5861,8 @@
     "smaddl": [
       {
         "name": "Signed Multiply-Add Long",
-        "summary": "Multiplies two 32-bit registers, adds to 64-bit register (64-bit result).",
-        "description": "Multiplies two 32-bit registers, adds to 64-bit register (64-bit result).",
+        "summary": "Multiplies two 64-bit registers, adds to 64-bit register (64-bit result).",
+        "description": "Multiplies two 64-bit registers, adds to 64-bit register (64-bit result).",
         "syntax": "SMADDL <Xd>, <Wn>, <Wm>, <Xa>",
         "operands": [
           {
@@ -5566,12 +5870,12 @@
             "desc": "Destination 64-bit integer register"
           },
           {
-            "name": "Wn",
-            "desc": "First source / base 32-bit integer register"
+            "name": "Xn",
+            "desc": "First source / base 64-bit integer register"
           },
           {
-            "name": "Wm",
-            "desc": "Second source / offset 32-bit integer register"
+            "name": "Xm",
+            "desc": "Second source / offset 64-bit integer register"
           },
           {
             "name": "Xa",
@@ -5587,8 +5891,8 @@
     "smsubl": [
       {
         "name": "Signed Multiply-Subtract Long",
-        "summary": "Calculates (Xa - (Wn * Wm)) (64-bit result).",
-        "description": "Calculates (Xa - (Wn * Wm)) (64-bit result).",
+        "summary": "Calculates (Xa - (Xn * Xm)) (64-bit result).",
+        "description": "Calculates (Xa - (Xn * Xm)) (64-bit result).",
         "syntax": "SMSUBL <Xd>, <Wn>, <Wm>, <Xa>",
         "operands": [
           {
@@ -5596,12 +5900,12 @@
             "desc": "Destination 64-bit integer register"
           },
           {
-            "name": "Wn",
-            "desc": "First source / base 32-bit integer register"
+            "name": "Xn",
+            "desc": "First source / base 64-bit integer register"
           },
           {
-            "name": "Wm",
-            "desc": "Second source / offset 32-bit integer register"
+            "name": "Xm",
+            "desc": "Second source / offset 64-bit integer register"
           },
           {
             "name": "Xa",
@@ -6298,6 +6602,38 @@
         "isa": [
           "A64"
         ]
+      },
+      {
+        "name": "Subtract (Shifted Register)",
+        "summary": "Subtracts the shifted second source from the first and writes the result to the destination.",
+        "description": "Subtracts the shifted second source from the first and writes the result to the destination.",
+        "syntax": "SUB <Xd>, <Xn>, <Xm>, <shift> #<amount>",
+        "operands": [
+          {
+            "name": "Xd",
+            "desc": "Destination register"
+          },
+          {
+            "name": "Xn",
+            "desc": "Source register"
+          },
+          {
+            "name": "Xm",
+            "desc": "Source register"
+          },
+          {
+            "name": "shift",
+            "desc": "Shift type"
+          },
+          {
+            "name": "amount",
+            "desc": "Shift amount"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
       }
     ],
     "subs": [
@@ -6366,6 +6702,38 @@
           {
             "name": "Wm",
             "desc": "Second source / offset 32-bit integer register"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
+      },
+      {
+        "name": "Subtract (Shifted Register)",
+        "summary": "Subtracts the shifted second source from the first and writes the result to the destination.",
+        "description": "Subtracts the shifted second source from the first and writes the result to the destination.",
+        "syntax": "SUBS <Xd>, <Xn>, <Xm>, <shift> #<amount>",
+        "operands": [
+          {
+            "name": "Xd",
+            "desc": "Destination register"
+          },
+          {
+            "name": "Xn",
+            "desc": "Source register"
+          },
+          {
+            "name": "Xm",
+            "desc": "Source register"
+          },
+          {
+            "name": "shift",
+            "desc": "Shift type"
+          },
+          {
+            "name": "amount",
+            "desc": "Shift amount"
           }
         ],
         "extension": "Base",
@@ -6507,8 +6875,8 @@
     "umaddl": [
       {
         "name": "Unsigned Multiply-Add Long",
-        "summary": "Multiplies two 32-bit regs, adds to 64-bit reg (Unsigned).",
-        "description": "Multiplies two 32-bit regs, adds to 64-bit reg (Unsigned).",
+        "summary": "Multiplies two 64-bit regs, adds to 64-bit reg (Unsigned).",
+        "description": "Multiplies two 64-bit regs, adds to 64-bit reg (Unsigned).",
         "syntax": "UMADDL <Xd>, <Wn>, <Wm>, <Xa>",
         "operands": [
           {
@@ -6516,12 +6884,12 @@
             "desc": "Destination 64-bit integer register"
           },
           {
-            "name": "Wn",
-            "desc": "First source / base 32-bit integer register"
+            "name": "Xn",
+            "desc": "First source / base 64-bit integer register"
           },
           {
-            "name": "Wm",
-            "desc": "Second source / offset 32-bit integer register"
+            "name": "Xm",
+            "desc": "Second source / offset 64-bit integer register"
           },
           {
             "name": "Xa",
@@ -6537,8 +6905,8 @@
     "umsubl": [
       {
         "name": "Unsigned Multiply-Subtract Long",
-        "summary": "Calculates (Xa - (Wn * Wm)) (Unsigned 64-bit).",
-        "description": "Calculates (Xa - (Wn * Wm)) (Unsigned 64-bit).",
+        "summary": "Calculates (Xa - (Xn * Xm)) (Unsigned 64-bit).",
+        "description": "Calculates (Xa - (Xn * Xm)) (Unsigned 64-bit).",
         "syntax": "UMSUBL <Xd>, <Wn>, <Wm>, <Xa>",
         "operands": [
           {
@@ -6546,12 +6914,12 @@
             "desc": "Destination 64-bit integer register"
           },
           {
-            "name": "Wn",
-            "desc": "First source / base 32-bit integer register"
+            "name": "Xn",
+            "desc": "First source / base 64-bit integer register"
           },
           {
-            "name": "Wm",
-            "desc": "Second source / offset 32-bit integer register"
+            "name": "Xm",
+            "desc": "Second source / offset 64-bit integer register"
           },
           {
             "name": "Xa",
@@ -8969,6 +9337,30 @@
         "isa": [
           "A64"
         ]
+      },
+      {
+        "name": "Conditional Increment",
+        "summary": "Increment register if condition is true, else copy. (Alias for CSINC)",
+        "description": "Increment register if condition is true, else copy. (Alias for CSINC)",
+        "syntax": "CINC <Xd>, <Xn>, <cond>",
+        "operands": [
+          {
+            "name": "Xd",
+            "desc": "Destination 64-bit integer register"
+          },
+          {
+            "name": "Xn",
+            "desc": "First source / base 64-bit integer register"
+          },
+          {
+            "name": "cond",
+            "desc": "Condition"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
       }
     ],
     "cinv": [
@@ -8995,6 +9387,30 @@
         "isa": [
           "A64"
         ]
+      },
+      {
+        "name": "Conditional Invert",
+        "summary": "Invert register bits if condition is true, else copy. (Alias for CSINV)",
+        "description": "Invert register bits if condition is true, else copy. (Alias for CSINV)",
+        "syntax": "CINV <Xd>, <Xn>, <cond>",
+        "operands": [
+          {
+            "name": "Xd",
+            "desc": "Destination 64-bit integer register"
+          },
+          {
+            "name": "Xn",
+            "desc": "First source / base 64-bit integer register"
+          },
+          {
+            "name": "cond",
+            "desc": "Condition"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
       }
     ],
     "cls": [
@@ -9011,6 +9427,26 @@
           {
             "name": "Wn",
             "desc": "First source / base 32-bit integer register"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
+      },
+      {
+        "name": "Count Leading Sign Bits",
+        "summary": "Counts the leading bits in Xn that match its sign bit and writes the count to Xd.",
+        "description": "Counts the leading bits in Xn that match its sign bit and writes the count to Xd.",
+        "syntax": "CLS <Xd>, <Xn>",
+        "operands": [
+          {
+            "name": "Xd",
+            "desc": "Destination register"
+          },
+          {
+            "name": "Xn",
+            "desc": "Source register"
           }
         ],
         "extension": "Base",
@@ -9059,6 +9495,26 @@
         "isa": [
           "A64"
         ]
+      },
+      {
+        "name": "Count Leading Zeros",
+        "summary": "Counts the leading zero bits in Xn and writes the count to Xd.",
+        "description": "Counts the leading zero bits in Xn and writes the count to Xd.",
+        "syntax": "CLZ <Xd>, <Xn>",
+        "operands": [
+          {
+            "name": "Xd",
+            "desc": "Destination register"
+          },
+          {
+            "name": "Xn",
+            "desc": "Source register"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
       }
     ],
     "cmn": [
@@ -9075,6 +9531,66 @@
           {
             "name": "imm",
             "desc": "Imm"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
+      },
+      {
+        "name": "Compare Negative (Register)",
+        "summary": "Adds Wn and Wm, updates NZCV, and discards the result.",
+        "description": "Adds Wn and Wm, updates NZCV, and discards the result.",
+        "syntax": "CMN <Wn>, <Wm>",
+        "operands": [
+          {
+            "name": "Wn",
+            "desc": "Source register"
+          },
+          {
+            "name": "Wm",
+            "desc": "Source register"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
+      },
+      {
+        "name": "Compare Negative (Register)",
+        "summary": "Adds Xn and Xm, updates NZCV, and discards the result.",
+        "description": "Adds Xn and Xm, updates NZCV, and discards the result.",
+        "syntax": "CMN <Xn>, <Xm>",
+        "operands": [
+          {
+            "name": "Xn",
+            "desc": "Source register"
+          },
+          {
+            "name": "Xm",
+            "desc": "Source register"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
+      },
+      {
+        "name": "Compare Negative (Immediate)",
+        "summary": "Adds an immediate to Xn, updates NZCV, and discards the result.",
+        "description": "Adds an immediate to Xn, updates NZCV, and discards the result.",
+        "syntax": "CMN <Xn>, #<imm>",
+        "operands": [
+          {
+            "name": "Xn",
+            "desc": "Source register"
+          },
+          {
+            "name": "imm",
+            "desc": "Immediate"
           }
         ],
         "extension": "Base",
@@ -9103,6 +9619,66 @@
         "isa": [
           "A64"
         ]
+      },
+      {
+        "name": "Compare (Register)",
+        "summary": "Compares Wn with Wm by subtracting the second from the first and updating NZCV; discards the result.",
+        "description": "Compares Wn with Wm by subtracting the second from the first and updating NZCV; discards the result.",
+        "syntax": "CMP <Wn>, <Wm>",
+        "operands": [
+          {
+            "name": "Wn",
+            "desc": "Source register"
+          },
+          {
+            "name": "Wm",
+            "desc": "Source register"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
+      },
+      {
+        "name": "Compare (Register)",
+        "summary": "Compares Xn with Xm by subtracting the second from the first and updating NZCV; discards the result.",
+        "description": "Compares Xn with Xm by subtracting the second from the first and updating NZCV; discards the result.",
+        "syntax": "CMP <Xn>, <Xm>",
+        "operands": [
+          {
+            "name": "Xn",
+            "desc": "Source register"
+          },
+          {
+            "name": "Xm",
+            "desc": "Source register"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
+      },
+      {
+        "name": "Compare (Immediate)",
+        "summary": "Compares Xn with an immediate by subtracting it and updating NZCV; discards the result.",
+        "description": "Compares Xn with an immediate by subtracting it and updating NZCV; discards the result.",
+        "syntax": "CMP <Xn>, #<imm>",
+        "operands": [
+          {
+            "name": "Xn",
+            "desc": "Source register"
+          },
+          {
+            "name": "imm",
+            "desc": "Immediate"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
       }
     ],
     "cneg": [
@@ -9119,6 +9695,30 @@
           {
             "name": "Wn",
             "desc": "First source / base 32-bit integer register"
+          },
+          {
+            "name": "cond",
+            "desc": "Condition"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
+      },
+      {
+        "name": "Conditional Negate",
+        "summary": "Negate register if condition is true, else copy. (Alias for CSNEG)",
+        "description": "Negate register if condition is true, else copy. (Alias for CSNEG)",
+        "syntax": "CNEG <Xd>, <Xn>, <cond>",
+        "operands": [
+          {
+            "name": "Xd",
+            "desc": "Destination 64-bit integer register"
+          },
+          {
+            "name": "Xn",
+            "desc": "First source / base 64-bit integer register"
           },
           {
             "name": "cond",
@@ -9159,6 +9759,34 @@
         "isa": [
           "A64"
         ]
+      },
+      {
+        "name": "Conditional Select",
+        "summary": "Selects between two registers based on condition.",
+        "description": "Selects between two registers based on condition.",
+        "syntax": "CSEL <Xd>, <Xn>, <Xm>, <cond>",
+        "operands": [
+          {
+            "name": "Xd",
+            "desc": "Destination 64-bit integer register"
+          },
+          {
+            "name": "Xn",
+            "desc": "True Src"
+          },
+          {
+            "name": "Xm",
+            "desc": "False Src"
+          },
+          {
+            "name": "cond",
+            "desc": "Condition"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
       }
     ],
     "cset": [
@@ -9171,6 +9799,26 @@
           {
             "name": "Wd",
             "desc": "Destination 32-bit integer register"
+          },
+          {
+            "name": "cond",
+            "desc": "Condition"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
+      },
+      {
+        "name": "Conditional Set",
+        "summary": "Sets register to 1 if condition true, else 0. (Alias for CSINC)",
+        "description": "Sets register to 1 if condition true, else 0. (Alias for CSINC)",
+        "syntax": "CSET <Xd>, <cond>",
+        "operands": [
+          {
+            "name": "Xd",
+            "desc": "Destination 64-bit integer register"
           },
           {
             "name": "cond",
@@ -9200,6 +9848,34 @@
           },
           {
             "name": "Wm",
+            "desc": "False Src"
+          },
+          {
+            "name": "cond",
+            "desc": "Cond"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
+      },
+      {
+        "name": "Conditional Select Increment",
+        "summary": "Selects Xn if cond true, else (Xm + 1).",
+        "description": "Selects Xn if cond true, else (Xm + 1).",
+        "syntax": "CSINC <Xd>, <Xn>, <Xm>, <cond>",
+        "operands": [
+          {
+            "name": "Xd",
+            "desc": "Destination 64-bit integer register"
+          },
+          {
+            "name": "Xn",
+            "desc": "True Src"
+          },
+          {
+            "name": "Xm",
             "desc": "False Src"
           },
           {
@@ -9241,6 +9917,34 @@
         "isa": [
           "A64"
         ]
+      },
+      {
+        "name": "Conditional Select Invert",
+        "summary": "Selects Xn if cond true, else NOT Xm.",
+        "description": "Selects Xn if cond true, else NOT Xm.",
+        "syntax": "CSINV <Xd>, <Xn>, <Xm>, <cond>",
+        "operands": [
+          {
+            "name": "Xd",
+            "desc": "Destination 64-bit integer register"
+          },
+          {
+            "name": "Xn",
+            "desc": "True Src"
+          },
+          {
+            "name": "Xm",
+            "desc": "False Src"
+          },
+          {
+            "name": "cond",
+            "desc": "Cond"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
       }
     ],
     "csneg": [
@@ -9260,6 +9964,34 @@
           },
           {
             "name": "Wm",
+            "desc": "False Src"
+          },
+          {
+            "name": "cond",
+            "desc": "Cond"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
+      },
+      {
+        "name": "Conditional Select Negate",
+        "summary": "Selects Xn if cond true, else -Xm.",
+        "description": "Selects Xn if cond true, else -Xm.",
+        "syntax": "CSNEG <Xd>, <Xn>, <Xm>, <cond>",
+        "operands": [
+          {
+            "name": "Xd",
+            "desc": "Destination 64-bit integer register"
+          },
+          {
+            "name": "Xn",
+            "desc": "True Src"
+          },
+          {
+            "name": "Xm",
             "desc": "False Src"
           },
           {
@@ -9519,6 +10251,30 @@
           }
         ],
         "extension": "SVE",
+        "isa": [
+          "A64"
+        ]
+      },
+      {
+        "name": "Bitwise Exclusive OR (Register)",
+        "summary": "XORs two registers.",
+        "description": "XORs two registers.",
+        "syntax": "EOR <Xd>, <Xn>, <Xm> {, <shift> #<amount>}",
+        "operands": [
+          {
+            "name": "Xd",
+            "desc": "Destination 64-bit integer register"
+          },
+          {
+            "name": "Xn",
+            "desc": "First source / base 64-bit integer register"
+          },
+          {
+            "name": "Xm",
+            "desc": "Second source / offset 64-bit integer register"
+          }
+        ],
+        "extension": "Base",
         "isa": [
           "A64"
         ]
@@ -9904,6 +10660,54 @@
           }
         ],
         "extension": "SVE",
+        "isa": [
+          "A64"
+        ]
+      },
+      {
+        "name": "Multiply",
+        "summary": "Multiplies Wn by Wm and writes the low 32 bits to Wd.",
+        "description": "Multiplies Wn by Wm and writes the low 32 bits to Wd.",
+        "syntax": "MUL <Wd>, <Wn>, <Wm>",
+        "operands": [
+          {
+            "name": "Wd",
+            "desc": "Destination register"
+          },
+          {
+            "name": "Wn",
+            "desc": "Source register"
+          },
+          {
+            "name": "Wm",
+            "desc": "Source register"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
+      },
+      {
+        "name": "Multiply",
+        "summary": "Multiplies Xn by Xm and writes the low 64 bits to Xd.",
+        "description": "Multiplies Xn by Xm and writes the low 64 bits to Xd.",
+        "syntax": "MUL <Xd>, <Xn>, <Xm>",
+        "operands": [
+          {
+            "name": "Xd",
+            "desc": "Destination register"
+          },
+          {
+            "name": "Xn",
+            "desc": "Source register"
+          },
+          {
+            "name": "Xm",
+            "desc": "Source register"
+          }
+        ],
+        "extension": "Base",
         "isa": [
           "A64"
         ]
@@ -13892,8 +14696,8 @@
     "sxtw": [
       {
         "name": "Sign Extend Word",
-        "summary": "Sign-extends a 32-bit register to 64 bits (Alias for SBFM).",
-        "description": "Sign-extends a 32-bit register to 64 bits (Alias for SBFM).",
+        "summary": "Sign-extends a 64-bit register to 64 bits (Alias for SBFM).",
+        "description": "Sign-extends a 64-bit register to 64 bits (Alias for SBFM).",
         "syntax": "SXTW <Xd>, <Wn>",
         "operands": [
           {
@@ -13901,7 +14705,7 @@
             "desc": "Dest (64)"
           },
           {
-            "name": "Wn",
+            "name": "Xn",
             "desc": "Source (32)"
           }
         ],
@@ -15447,6 +16251,130 @@
           }
         ],
         "extension": "CRC",
+        "isa": [
+          "A64"
+        ]
+      }
+    ],
+    "tst": [
+      {
+        "name": "Test Bits (Register)",
+        "summary": "ANDs Wn with Wm and updates NZCV without keeping the result.",
+        "description": "ANDs Wn with Wm and updates NZCV without keeping the result.",
+        "syntax": "TST <Wn>, <Wm>",
+        "operands": [
+          {
+            "name": "Wn",
+            "desc": "Source register"
+          },
+          {
+            "name": "Wm",
+            "desc": "Source register"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
+      },
+      {
+        "name": "Test Bits (Immediate)",
+        "summary": "ANDs Wn with an immediate and updates NZCV without keeping the result.",
+        "description": "ANDs Wn with an immediate and updates NZCV without keeping the result.",
+        "syntax": "TST <Wn>, #<imm>",
+        "operands": [
+          {
+            "name": "Wn",
+            "desc": "Source register"
+          },
+          {
+            "name": "imm",
+            "desc": "Immediate"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
+      },
+      {
+        "name": "Test Bits (Register)",
+        "summary": "ANDs Xn with Xm and updates NZCV without keeping the result.",
+        "description": "ANDs Xn with Xm and updates NZCV without keeping the result.",
+        "syntax": "TST <Xn>, <Xm>",
+        "operands": [
+          {
+            "name": "Xn",
+            "desc": "Source register"
+          },
+          {
+            "name": "Xm",
+            "desc": "Source register"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
+      },
+      {
+        "name": "Test Bits (Immediate)",
+        "summary": "ANDs Xn with an immediate and updates NZCV without keeping the result.",
+        "description": "ANDs Xn with an immediate and updates NZCV without keeping the result.",
+        "syntax": "TST <Xn>, #<imm>",
+        "operands": [
+          {
+            "name": "Xn",
+            "desc": "Source register"
+          },
+          {
+            "name": "imm",
+            "desc": "Immediate"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
+      }
+    ],
+    "csetm": [
+      {
+        "name": "Conditional Set Mask",
+        "summary": "Writes all ones to Wd when the condition is true, otherwise zero.",
+        "description": "Writes all ones to Wd when the condition is true, otherwise zero.",
+        "syntax": "CSETM <Wd>, <cond>",
+        "operands": [
+          {
+            "name": "Wd",
+            "desc": "Destination register"
+          },
+          {
+            "name": "cond",
+            "desc": "Condition"
+          }
+        ],
+        "extension": "Base",
+        "isa": [
+          "A64"
+        ]
+      },
+      {
+        "name": "Conditional Set Mask",
+        "summary": "Writes all ones to Xd when the condition is true, otherwise zero.",
+        "description": "Writes all ones to Xd when the condition is true, otherwise zero.",
+        "syntax": "CSETM <Xd>, <cond>",
+        "operands": [
+          {
+            "name": "Xd",
+            "desc": "Destination register"
+          },
+          {
+            "name": "cond",
+            "desc": "Condition"
+          }
+        ],
+        "extension": "Base",
         "isa": [
           "A64"
         ]
