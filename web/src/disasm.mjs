@@ -13,10 +13,32 @@ const ARCHES = {
 
 export const ARCH_NAMES = Object.keys(ARCHES);
 
-export function createDisassembler(archName, capstone, syntax = 'intel') {
+export function createDisassembler(archName, capstone, syntax = 'intel', flags = {
+  has_a: true,
+  has_f: true,
+  has_d: true,
+  has_v: true,
+}) {
   const spec = ARCHES[archName];
   if (!spec) throw new Error(`unknown arch ${archName}`);
-  const handle = capstone._dis_open(spec.target, syntax === 'att' ? 1 : 0);
+  const riscvModes = {
+    has_a: 1 << 9,
+    has_f: 1 << 3,
+    has_d: 1 << 3,
+    has_v: 1 << 4,
+    has_zba: 1 << 14,
+    has_zbb: 1 << 15,
+    has_zbc: 1 << 16,
+    has_zbkb: 1 << 17,
+    has_zbkc: 1 << 18,
+    has_zbkx: 1 << 19,
+    has_zbs: 1 << 20,
+  };
+  const mode = spec.target === 2
+    ? (1 << 1) | (1 << 2) | Object.entries(riscvModes)
+      .reduce((value, [flag, bit]) => value | (flags[flag] ? bit : 0), 0)
+    : syntax === 'att' ? 1 : 0;
+  const handle = capstone._dis_open(spec.target, mode);
   if (!handle) throw new Error(`cannot open disassembler for ${archName}`);
   const codePointer = capstone._malloc(WINDOW);
   const textPointer = capstone._malloc(TEXT_CAPACITY);

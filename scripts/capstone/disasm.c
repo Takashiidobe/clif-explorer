@@ -10,10 +10,13 @@ static const struct { cs_arch arch; cs_mode mode; } TARGETS[] = {
   { CS_ARCH_SYSTEMZ, CS_MODE_BIG_ENDIAN },
 };
 
-EMSCRIPTEN_KEEPALIVE int dis_open(int target, int att) {
+EMSCRIPTEN_KEEPALIVE int dis_open(int target, int option) {
   csh handle;
-  if (target < 0 || target > 3 || cs_open(TARGETS[target].arch, TARGETS[target].mode, &handle) != CS_ERR_OK) return 0;
-  if (target == 0 && cs_option(handle, CS_OPT_SYNTAX, att ? CS_OPT_SYNTAX_ATT : CS_OPT_SYNTAX_INTEL) != CS_ERR_OK) {
+  if (target < 0 || target > 3) return 0;
+  cs_mode mode = TARGETS[target].mode;
+  if (target == 2) mode |= (cs_mode)option;
+  if (cs_open(TARGETS[target].arch, mode, &handle) != CS_ERR_OK) return 0;
+  if (target == 0 && cs_option(handle, CS_OPT_SYNTAX, option ? CS_OPT_SYNTAX_ATT : CS_OPT_SYNTAX_INTEL) != CS_ERR_OK) {
     cs_close(&handle);
     return 0;
   }

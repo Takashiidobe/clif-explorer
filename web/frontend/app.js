@@ -271,6 +271,14 @@ function flagArguments() {
   ];
 }
 
+function disassemblerFlags() {
+  return Object.fromEntries(
+    currentSchema
+      .filter((flag) => !flag.shared && flag.kind === 'bool')
+      .map((flag) => [flag.name, effectiveValue(flag) === 'true']),
+  );
+}
+
 let markedLines = [];
 
 function clearDiagnostics() {
@@ -412,7 +420,7 @@ async function compile() {
   try {
     await loadSchema();
     if (seq !== compileSeq) return;
-    const request = { arch: state.arch, clif: editor.getValue(), flags: flagArguments() };
+    const request = { arch: state.arch, clif: editor.getValue(), flags: flagArguments(), disasmFlags: disassemblerFlags() };
     const result = await client().call('compile', request, COMPILE_TIMEOUT_MS);
     if (seq !== compileSeq) return;
     saveState();

@@ -227,7 +227,7 @@ function argsBlock(abi, entry, values) {
   return block;
 }
 
-export async function createRunner(archName, functions, { qemu, capstone, compileAdapter }) {
+export async function createRunner(archName, functions, { qemu, capstone, compileAdapter, disasmFlags }) {
   const abi = ABIS[archName];
   if (!abi) throw new RunError(`unknown arch ${archName}`);
   if (!compileAdapter) throw new RunError('Run requires an adapter compiler');
@@ -235,7 +235,7 @@ export async function createRunner(archName, functions, { qemu, capstone, compil
   applyRelocs(archName, functions, code, offsets, abi.codeBase);
   const stub = expandStub(archName);
 
-  const disassembler = await createDisassembler(archName, await capstone());
+  const disassembler = await createDisassembler(archName, await capstone(), 'intel', disasmFlags);
   const lines = new Map();
   for (const f of functions) {
     for (const line of disassembler.disassemble(f.code, f.traps, abi.codeBase + offsets.get(f.name))) {

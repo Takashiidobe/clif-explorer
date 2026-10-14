@@ -47,8 +47,8 @@ const providers = {
   },
 };
 
-async function disassemble(arch, functions, syntax = 'intel') {
-  const disassembler = createDisassembler(arch, await providers.capstone(), syntax);
+async function disassemble(arch, functions, syntax = 'intel', flags = {}) {
+  const disassembler = createDisassembler(arch, await providers.capstone(), syntax, flags);
   try {
     return functions.map((f) => ({ ...f, lines: disassembler.disassemble(f.code, f.traps) }));
   } finally {
@@ -61,14 +61,14 @@ function compileKey({ arch, clif, flags }) {
 }
 
 async function compile(request) {
-  const { arch, clif, flags } = request;
+  const { arch, clif, flags, disasmFlags = {} } = request;
   const started = performance.now();
   const output = cranelift.compile(clif, TRIPLES[arch], flags);
   const ms = performance.now() - started;
   compiled = output.errors.length ? null : { key: compileKey(request), arch, functions: output.functions, runner: null };
-  const functions = output.errors.length ? [] : await disassemble(arch, output.functions);
+  const functions = output.errors.length ? [] : await disassemble(arch, output.functions, 'intel', disasmFlags);
   if (arch === 'x86_64' && functions.length) {
-    const att = await disassemble(arch, output.functions, 'att');
+    const att = await disassemble(arch, output.functions, 'att', disasmFlags);
     functions.forEach((f, i) => { f.attLines = att[i].lines; });
   }
   return { errors: output.errors, functions, ms };
@@ -98,6 +98,7 @@ const handlers = {
     }
     compiled.runner ??= await createRunner(compiled.arch, compiled.functions, {
       ...providers,
+      disasmFlags: request.disasmFlags,
       compileAdapter: (source) => cranelift.compile(source, TRIPLES[request.arch], request.flags),
     });
     const started = performance.now();
