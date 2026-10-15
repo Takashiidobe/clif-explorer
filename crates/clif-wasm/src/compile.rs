@@ -149,6 +149,7 @@ fn try_compile(
         let returns = func.signature.returns.iter().map(|p| p.value_type.to_string()).collect();
         let call_conv = func.signature.call_conv.to_string();
         let signature = func.signature.to_string();
+        let func_params = func.params.clone();
         let mut ctx = Context::for_function(func);
         ctx.set_disasm(true);
         match ctx.compile(&*isa, &mut ControlPlane::default()) {
@@ -167,7 +168,7 @@ fn try_compile(
                     .map(|r| RelocOutput {
                         offset: r.offset,
                         kind: r.kind.to_string(),
-                        target: r.target.display(None),
+                        target: r.target.display(Some(&func_params)).to_string(),
                         addend: r.addend,
                     })
                     .collect(),
@@ -251,6 +252,18 @@ mod tests {
             for reloc in out.functions.iter().flat_map(|f| &f.relocs) {
                 assert!(SUPPORTED.contains(&reloc.kind.as_str()), "{triple}: {}", reloc.kind);
             }
+        }
+    }
+
+    #[test]
+    fn user_reloc_targets_keep_their_function_names() {
+        const ADAPTER: &str = "function %adapter(i32) -> i32 {\n    fn0 = colocated u0:0(i32) -> i32 system_v\nblock0(v0: i32):\n    v1 = call fn0(v0)\n    return v1\n}\n";
+        for triple in TRIPLES {
+            let out = compile(ADAPTER, triple, &["unwind_info=false".to_string()]);
+            assert!(out.errors.is_empty(), "{triple}: {:?}", out.errors);
+            assert_eq!(out.functions.len(), 1);
+            assert_eq!(out.functions[0].relocs.len(), 1, "{triple}");
+            assert_eq!(out.functions[0].relocs[0].target, "u0:0", "{triple}");
         }
     }
 
