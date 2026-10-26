@@ -13,6 +13,8 @@ unless noted.
 
 ## Rebuild everything
 
+After a QEMU build exists (steps 1 and 2), `web/build.sh` runs steps 3 and 4.
+
 1. Get QEMU. The build is tested at commit `615ece3c40`.
 
    ```sh
